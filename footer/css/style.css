@@ -1,0 +1,239 @@
+ /* =========================================
+   RESET & BASIC SETUP
+   ========================================= */
+* {
+    box-sizing: border-box; /* Sabse zaroori fix */
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden; /* Side scroll hatane ke liye */
+}
+
+:root {
+    --footer-bg: #111827;
+    --text-color: #9ca3af;
+    --white: #ffffff;
+    --accent: #2563eb;
+}
+
+.site-footer {
+    background-color: var(--footer-bg);
+    color: var(--text-color);
+    padding: 40px 20px;
+    width: 100%;
+    font-family: sans-serif;
+    border: 1px solid red; /* DEBUG: Agar red border dikhe to CSS load ho raha hai */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Grid Layout */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.footer-col h4 {
+    color: var(--white);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col li {
+    margin-bottom: 10px;
+}
+
+.footer-col a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+/* Newsletter Form */
+.newsletter-form {
+    display: flex;
+    gap: 10px;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+}
+
+.newsletter-form button {
+    padding: 10px 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Social Icons */
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-links a {
+    width: 35px;
+    height: 35px;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    background: var(--accent);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.payment-methods {
+    font-size: 1.5rem;
+    display: flex;
+    gap: 15px;
+    color: #fff;
+}
+
+/* =========================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================= */
+
+/* Tablet & Small Desktop */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    .footer-about {
+        grid-column: span 2;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+    .footer-grid {
+        grid-template-columns: 1fr; /* Single Column */
+        gap: 30px;
+    }
+    
+    .footer-about {
+        grid-column: span 1;
+    }
+
+    .newsletter-form {
+        flex-direction: column; /* Stack form */
+    }
+    
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100%;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+}
+
+/* =========================================
+   250px SCREEN FIX (FINAL)
+   ========================================= */
+
+@media (max-width: 280px) {
+    
+    /* 1. Padding Almost Zero */
+    .site-footer {
+        padding: 20px 5px !important;
+    }
+    
+    .container {
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    /* 2. Force Stack Grid */
+    .footer-grid {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .footer-col {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 25px !important;
+    }
+
+    /* 3. Tiny Fonts */
+    .site-footer, 
+    .footer-bottom,
+    .footer-col a {
+        font-size: 11px !important;
+    }
+
+    .footer-col h4 {
+        font-size: 13px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* 4. Form Reset */
+    .newsletter-form {
+        display: block !important;
+    }
+    
+    .newsletter-form input, 
+    .newsletter-form button {
+        width: 100% !important;
+        padding: 6px !important;
+        font-size: 11px !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* 5. Icons Small */
+    .social-links a {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 10px !important;
+    }
+    
+    .payment-methods {
+        font-size: 1.2rem !important;
+        gap: 8px !important;
+    }
+}
