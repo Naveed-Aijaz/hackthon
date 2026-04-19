@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footer</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0e0e11;
+      --bg-elevated: #17171c;
+      --card: #1c1c23;
+      --border: #2a2a35;
+      --fg: #eaeaf0;
+      --fg-muted: #8b8b9e;
+      --fg-dim: #5c5c70;
+      --accent: #d4915e;
+      --accent-light: #e8a87c;
+      --accent-glow: rgba(212, 145, 94, 0.15);
+      --accent-glow-strong: rgba(212, 145, 94, 0.3);
+      --error: #e05c5c;
+      --success: #5ec28a;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: 'Playfair Display', serif;
+      --font-ui: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-spacer { flex: 1; }
+
+    /* ═══════════════════════════════════════════
+       FOOTER ROOT
+    ═══════════════════════════════════════════ */
+    .footer {
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 20%; right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
+    }
+
+    /* ── Newsletter Section ── */
+    .footer__newsletter {
+      padding: 48px 24px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .footer__newsletter-info { max-width: 400px; }
+
+    .footer__newsletter-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .footer__newsletter-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--fg);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .footer__newsletter-desc {
+      font-size: 0.84rem;
+      color: var(--fg-muted);
+      line-height: 1.5;
+    }
+
+    .footer__newsletter-form {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      max-width: 420px;
+      min-width: 240px;
+    }
+
+    .footer__newsletter-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--fg);
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      outline: none;
+      transition: all var(--transition);
+    }
+
+    .footer__newsletter-input::placeholder { color: var(--fg-dim); }
+
+    .footer__newsletter-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .footer__newsletter-input--error {
+      border-color: var(--error) !important;
+      box-shadow: 0 0 0 3px rgba(224, 92, 92, 0.1) !important;
+    }
+
+    .footer__newsletter-input--success {
+      border-color: var(--success) !important;
+    }
+
+    .footer__newsletter-btn {
+      padding: 12px 22px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer__newsletter-btn:hover {
+      box-shadow: 0 4px 20px var(--accent-glow-strong);
+      transform: translateY(-1px);
+    }
+
+    .footer__newsletter-btn:active { transform: translateY(0); }
+
+    .footer__newsletter-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .footer__newsletter-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .footer__newsletter-btn:hover::after { left: 100%; }
+
+    .footer__newsletter-msg {
+      width: 100%;
+      font-size: 0.78rem;
+      margin-top: 0;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .footer__newsletter-msg--visible {
+      opacity: 1;
+      max-height: 30px;
+      margin-top: 8px;
+    }
+
+    .footer__newsletter-msg--error { color: var(--error); }
+    .footer__newsletter-msg--success { color: var(--success); }
+
+    /* ── Links Container ── */
+    .footer__links-area {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px 40px;
+    }
+
+    /* ── Desktop Grid ── */
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer__brand {}
+
+    .footer__brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      margin-bottom: 16px;
+    }
+
+    .footer__brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+      box-shadow: 0 2px 12px var(--accent-glow);
+    }
+
+    .footer__brand-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--fg);
+    }
+
+    .footer__brand-desc {
+      font-size: 0.84rem;
+      color: var(--fg-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      max-width: 260px;
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: 8px;
+    }
+
+    .footer__social-link {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--fg-dim);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+
+    .footer__social-link:hover {
+      color: var(--fg);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    /* ── Link Columns ── */
+    .footer__col {}
+
+    .footer__col-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg);
+      margin-bottom: 18px;
+    }
+
+    .footer__col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer__col-links li a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      transition: color var(--transition);
+      line-height: 1.4;
+    }
+
+    .footer__col-links li a:hover { color: var(--accent-light); }
+
+    .footer__col-links li a i {
+      font-size: 0.72rem;
+      width: 16px;
+      text-align: center;
+      color: var(--fg-dim);
+      transition: color var(--transition);
+    }
+
+    .footer__col-links li a:hover i { color: var(--accent); }
+
+    .footer__col-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 99px;
+      margin-left: 2px;
+      vertical-align: middle;
+      line-height: 1.7;
+    }
+
+    .footer__col-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--success);
+      margin-top: 2px;
+    }
+
+    .footer__col-status::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(94, 194, 138, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 5px rgba(94, 194, 138, 0); }
+    }
+
+    /* ── Mobile Accordions (hidden by default) ── */
+    .footer__mobile { display: none; }
+
+    .footer__mobile-brand {
+      padding: 20px 0 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
+
+    .footer__mobile-brand .footer__brand-logo { margin-bottom: 12px; }
+    .footer__mobile-brand .footer__brand-desc { margin-bottom: 14px; }
+
+    .footer__accordion { border-bottom: 1px solid var(--border); }
+    .footer__accordion:last-child { border-bottom: none; }
+
+    .footer__accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      background: none;
+      border: none;
+      color: var(--fg);
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+
+    .footer__accordion-trigger:hover { color: var(--accent-light); }
+
+    .footer__accordion-trigger i {
+      font-size: 0.7rem;
+      color: var(--fg-dim);
+      transition: transform var(--transition);
+    }
+
+    .footer__accordion--open .footer__accordion-trigger i {
+      transform: rotate(180deg);
+    }
+
+    .footer__accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .footer__accordion--open .footer__accordion-body {
+      max-height: 300px;
+    }
+
+    .footer__accordion-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: 16px;
+    }
+
+    .footer__accordion-links li a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      transition: color var(--transition);
+    }
+
+    .footer__accordion-links li a:hover { color: var(--accent-light); }
+
+    .footer__accordion-links li a i {
+      font-size: 0.72rem;
+      width: 16px;
+      text-align: center;
+      color: var(--fg-dim);
+    }
+
+    /* ── Bottom Bar ── */
+    .footer__bottom {
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer__copyright {
+      font-size: 0.78rem;
+      color: var(--fg-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .footer__copyright a {
+      color: var(--fg-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer__copyright a:hover { color: var(--accent); }
+
+    .footer__bottom-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Language Selector */
+    .footer__lang { position: relative; }
+
+    .footer__lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      color: var(--fg-muted);
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .footer__lang-btn:hover {
+      border-color: var(--fg-dim);
+      color: var(--fg);
+    }
+
+    .footer__lang-btn .fa-chevron-down {
+      font-size: 0.55rem;
+      transition: transform var(--transition);
+    }
+
+    .footer__lang-btn--open .fa-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    .footer__lang-dropdown {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: 0;
+      min-width: 160px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: all 0.2s ease;
+      z-index: 50;
+    }
+
+    .footer__lang-dropdown::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      right: 16px;
+      width: 12px; height: 12px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transform: rotate(45deg);
+    }
+
+    .footer__lang-btn--open .footer__lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .footer__lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      color: var(--fg-muted);
+      font-size: 0.82rem;
+      border-radius: 6px;
+      transition: all var(--transition);
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: var(--font-ui);
+    }
+
+    .footer__lang-option:hover {
+      color: var(--fg);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .footer__lang-option--active { color: var(--accent); }
+
+    .footer__lang-option span {
+      opacity: 0.5;
+      font-size: 0.72rem;
+    }
+
+    /* Back to Top */
+    .footer__top-btn {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--fg-dim);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .footer__top-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+
+    /* Tablet: 3 columns */
+    @media (max-width: 960px) {
+      .footer__grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .footer__brand {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .footer__brand > div:first-child { flex: 1; }
+      .footer__brand-desc { margin-bottom: 0; }
+      .footer__socials { flex-shrink: 0; }
+    }
+
+    /* Mobile: switch to accordions */
+    @media (max-width: 700px) {
+      .footer__newsletter {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 36px 20px 28px;
+        gap: 16px;
+      }
+      .footer__newsletter-info { max-width: 100%; }
+      .footer__newsletter-form { max-width: 100%; min-width: 0; width: 100%; }
+
+      /* Explicitly hide grid, show mobile */
+      .footer__grid { display: none !important; }
+      .footer__mobile { display: block !important; }
+
+      .footer__links-area { padding: 32px 20px 28px; }
+
+      .footer__bottom {
+        padding: 16px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .footer__bottom-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer__newsletter { padding: 28px 16px 24px; }
+      .footer__newsletter-title { font-size: 1.1rem; }
+      .footer__newsletter-input { padding: 10px 14px; font-size: 0.84rem; }
+      .footer__newsletter-btn { padding: 10px 18px; font-size: 0.82rem; }
+      .footer__links-area { padding: 24px 16px 20px; }
+      .footer__bottom { padding: 14px 16px; }
+      .footer__socials { gap: 6px; }
+      .footer__social-link { width: 32px; height: 32px; font-size: 0.8rem; }
+    }
+
+    @media (max-width: 360px) {
+      .footer__newsletter-title { font-size: 1rem; }
+      .footer__newsletter-desc { font-size: 0.78rem; }
+      .footer__newsletter-form { flex-direction: column; gap: 6px; }
+      .footer__newsletter-btn { width: 100%; padding: 10px; }
+      .footer__bottom-right { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .footer__brand { flex-direction: column; align-items: flex-start; gap: 14px; }
+    }
+
+    @media (max-width: 250px) {
+      .footer__newsletter { padding: 20px 10px 16px; gap: 12px; }
+      .footer__newsletter-label { font-size: 0.65rem; }
+      .footer__newsletter-title { font-size: 0.88rem; }
+      .footer__newsletter-desc { font-size: 0.72rem; }
+      .footer__newsletter-input { padding: 9px 10px; font-size: 0.78rem; }
+      .footer__newsletter-btn { padding: 9px; font-size: 0.78rem; }
+      .footer__links-area { padding: 16px 10px 14px; }
+      .footer__accordion-trigger { padding: 12px 0; font-size: 0.82rem; }
+      .footer__accordion-links li a { font-size: 0.78rem; }
+      .footer__bottom { padding: 12px 10px; }
+      .footer__copyright { font-size: 0.68rem; }
+      .footer__lang-btn { padding: 5px 8px; font-size: 0.7rem; }
+      .footer__socials { gap: 4px; }
+      .footer__social-link { width: 28px; height: 28px; font-size: 0.72rem; border-radius: 6px; }
+      .footer__brand-icon { width: 30px; height: 30px; font-size: 13px; }
+      .footer__brand-name { font-size: 1rem; }
+      .footer__brand-desc { font-size: 0.72rem; }
+      .footer__mobile-brand { padding: 14px 0 12px; }
+      .footer__top-btn { width: 30px; height: 30px; font-size: 0.78rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-spacer"></div>
+
+  <footer class="footer" role="contentinfo">
+
+    <!-- Newsletter -->
+    <div class="footer__newsletter">
+      <div class="footer__newsletter-info">
+        <div class="footer__newsletter-label">Stay Updated</div>
+        <h3 class="footer__newsletter-title">Subscribe to our newsletter</h3>
+        <p class="footer__newsletter-desc">Get the latest news and insights delivered weekly. No spam, unsubscribe anytime.</p>
+      </div>
+      <form class="footer__newsletter-form" id="newsletterForm" novalidate autocomplete="off">
+        <input class="footer__newsletter-input" type="email" id="newsletterEmail" placeholder="Enter your email" autocomplete="email">
+        <button class="footer__newsletter-btn" type="submit" id="newsletterBtn">Subscribe</button>
+      </form>
+      <div class="footer__newsletter-msg" id="newsletterMsg" role="status" aria-live="polite"></div>
+    </div>
+
+    <!-- Links Area -->
+    <div class="footer__links-area">
+
+      <!-- Desktop Grid -->
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div>
+            <a href="#" class="footer__brand-logo" onclick="event.preventDefault()">
+              <div class="footer__brand-icon"><i class="fa-solid fa-fingerprint"></i></div>
+              <span class="footer__brand-name">Portal</span>
+            </a>
+            <p class="footer__brand-desc">Building modern tools for developers and teams. Secure, fast, and designed with care since 2021.</p>
+          </div>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link" aria-label="Twitter" onclick="event.preventDefault()"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="footer__social-link" aria-label="GitHub" onclick="event.preventDefault()"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="footer__social-link" aria-label="LinkedIn" onclick="event.preventDefault()"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="footer__social-link" aria-label="YouTube" onclick="event.preventDefault()"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="footer__social-link" aria-label="Discord" onclick="event.preventDefault()"><i class="fa-brands fa-discord"></i></a>
+          </div>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Products</h4>
+          <ul class="footer__col-links">
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-bolt"></i> Lightning <span class="footer__col-badge">New</span></a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-shield-halved"></i> Shield</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-code"></i> API</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-puzzle-piece"></i> Integrations</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-arrows-rotate"></i> Changelog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Resources</h4>
+          <ul class="footer__col-links">
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-book"></i> Documentation</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-graduation-cap"></i> Tutorials</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-blog"></i> Blog</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-users"></i> Community</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-headset"></i> Support</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Company</h4>
+          <ul class="footer__col-links">
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-building"></i> About</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-briefcase"></i> Careers</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-newspaper"></i> Press</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-handshake"></i> Partners</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+            <li><span class="footer__col-status">All systems operational</span></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Legal</h4>
+          <ul class="footer__col-links">
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-file-contract"></i> Terms of Service</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-lock"></i> Privacy Policy</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-cookie-bite"></i> Cookie Policy</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-shield"></i> Security</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-scale-balanced"></i> Compliance</a></li>
+            <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-globe"></i> GDPR</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Mobile Accordions -->
+      <div class="footer__mobile">
+
+        <div class="footer__mobile-brand">
+          <a href="#" class="footer__brand-logo" onclick="event.preventDefault()">
+            <div class="footer__brand-icon"><i class="fa-solid fa-fingerprint"></i></div>
+            <span class="footer__brand-name">Portal</span>
+          </a>
+          <p class="footer__brand-desc">Building modern tools for developers and teams since 2021.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link" aria-label="Twitter" onclick="event.preventDefault()"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="footer__social-link" aria-label="GitHub" onclick="event.preventDefault()"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="footer__social-link" aria-label="LinkedIn" onclick="event.preventDefault()"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="footer__social-link" aria-label="YouTube" onclick="event.preventDefault()"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="footer__social-link" aria-label="Discord" onclick="event.preventDefault()"><i class="fa-brands fa-discord"></i></a>
+          </div>
+        </div>
+
+        <div class="footer__accordion" data-accordion>
+          <button class="footer__accordion-trigger" aria-expanded="false">
+            Products <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="footer__accordion-body">
+            <ul class="footer__accordion-links">
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-bolt"></i> Lightning <span class="footer__col-badge" style="font-size:0.55rem">New</span></a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-shield-halved"></i> Shield</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-code"></i> API</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-puzzle-piece"></i> Integrations</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__accordion" data-accordion>
+          <button class="footer__accordion-trigger" aria-expanded="false">
+            Resources <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="footer__accordion-body">
+            <ul class="footer__accordion-links">
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-book"></i> Documentation</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-graduation-cap"></i> Tutorials</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-blog"></i> Blog</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-users"></i> Community</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-headset"></i> Support</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__accordion" data-accordion>
+          <button class="footer__accordion-trigger" aria-expanded="false">
+            Company <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="footer__accordion-body">
+            <ul class="footer__accordion-links">
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-building"></i> About</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-briefcase"></i> Careers</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+              <li><span class="footer__col-status" style="padding:0 0 6px">All systems operational</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__accordion" data-accordion>
+          <button class="footer__accordion-trigger" aria-expanded="false">
+            Legal <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="footer__accordion-body">
+            <ul class="footer__accordion-links">
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-file-contract"></i> Terms of Service</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-lock"></i> Privacy Policy</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-cookie-bite"></i> Cookie Policy</a></li>
+              <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-globe"></i> GDPR</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer__bottom">
+      <div class="footer__copyright">
+        <span id="copyrightText"></span>
+        <span>All rights reserved.</span>
+        <a href="#" onclick="event.preventDefault()">Privacy</a>
+        <span>&middot;</span>
+        <a href="#" onclick="event.preventDefault()">Terms</a>
+        <span>&middot;</span>
+        <a href="#" onclick="event.preventDefault()">Sitemap</a>
+      </div>
+      <div class="footer__bottom-right">
+        <div class="footer__lang" id="langSelector">
+          <button class="footer__lang-btn" id="langBtn" type="button" aria-label="Select language" aria-haspopup="true" aria-expanded="false">
+            <i class="fa-solid fa-globe"></i>
+            <span id="langCurrent">English</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="footer__lang-dropdown" role="menu">
+            <button class="footer__lang-option footer__lang-option--active" data-lang="English" role="menuitem">English <span>EN</span></button>
+            <button class="footer__lang-option" data-lang="Espanol" role="menuitem">Espanol <span>ES</span></button>
+            <button class="footer__lang-option" data-lang="Francais" role="menuitem">Francais <span>FR</span></button>
+            <button class="footer__lang-option" data-lang="Deutsch" role="menuitem">Deutsch <span>DE</span></button>
+            <button class="footer__lang-option" data-lang="Japanese" role="menuitem">Japanese <span>JA</span></button>
+            <button class="footer__lang-option" data-lang="Chinese" role="menuitem">Chinese <span>ZH</span></button>
+          </div>
+        </div>
+        <button class="footer__top-btn" id="topBtn" type="button" aria-label="Back to top">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════
+       Copyright Year
+    ═══════════════════════════════════════════ */
+    document.getElementById('copyrightText').textContent =
+      '\u00A9 ' + new Date().getFullYear() + ' Portal.';
+
+    /* ═══════════════════════════════════════════
+       Newsletter
+    ═══════════════════════════════════════════ */
+    const nlForm = document.getElementById('newsletterForm');
+    const nlInput = document.getElementById('newsletterEmail');
+    const nlBtn = document.getElementById('newsletterBtn');
+    const nlMsg = document.getElementById('newsletterMsg');
+
+    function getSubs() {
+      try { return JSON.parse(localStorage.getItem('portal_subs')) || []; }
+      catch { return []; }
+    }
+    function saveSubs(l) { localStorage.setItem('portal_subs', JSON.stringify(l)); }
+
+    function nlShow(type, text) {
+      nlMsg.textContent = text;
+      nlMsg.className = 'footer__newsletter-msg footer__newsletter-msg--' + type + ' footer__newsletter-msg--visible';
+    }
+    function nlHide() {
+      nlMsg.className = 'footer__newsletter-msg';
+    }
+
+    nlInput.addEventListener('input', () => {
+      nlInput.classList.remove('footer__newsletter-input--error', 'footer__newsletter-input--success');
+      nlHide();
+    });
+
+    nlForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = nlInput.value.trim();
+
+      if (!v) {
+        nlInput.classList.add('footer__newsletter-input--error');
+        nlShow('error', 'Please enter your email address.');
+        nlInput.focus();
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+        nlInput.classList.add('footer__newsletter-input--error');
+        nlShow('error', 'Please enter a valid email address.');
+        nlInput.focus();
+        return;
+      }
+
+      const subs = getSubs();
+      if (subs.includes(v.toLowerCase())) {
+        nlInput.classList.add('footer__newsletter-input--error');
+        nlShow('error', 'This email is already subscribed.');
+        return;
+      }
+
+      nlBtn.disabled = true;
+      nlBtn.textContent = 'Subscribing...';
+
+      setTimeout(() => {
+        subs.push(v.toLowerCase());
+        saveSubs(subs);
+        nlInput.classList.remove('footer__newsletter-input--error');
+        nlInput.classList.add('footer__newsletter-input--success');
+        nlShow('success', 'Thanks! ' + v + ' has been added. Check your inbox.');
+        nlInput.value = '';
+        nlBtn.disabled = false;
+        nlBtn.textContent = 'Subscribe';
+        setTimeout(() => {
+          nlInput.classList.remove('footer__newsletter-input--success');
+          nlHide();
+        }, 5000);
+      }, 800);
+    });
+
+    /* ═══════════════════════════════════════════
+       Mobile Accordions
+    ═══════════════════════════════════════════ */
+    document.querySelectorAll('[data-accordion]').forEach(acc => {
+      acc.querySelector('.footer__accordion-trigger').addEventListener('click', () => {
+        const open = acc.classList.contains('footer__accordion--open');
+        // Close all
+        document.querySelectorAll('[data-accordion]').forEach(a => {
+          a.classList.remove('footer__accordion--open');
+          a.querySelector('.footer__accordion-trigger').setAttribute('aria-expanded', 'false');
+        });
+        if (!open) {
+          acc.classList.add('footer__accordion--open');
+          acc.querySelector('.footer__accordion-trigger').setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    /* ═══════════════════════════════════════════
+       Language Selector
+    ═══════════════════════════════════════════ */
+    const langBtn = document.getElementById('langBtn');
+    const langCurrent = document.getElementById('langCurrent');
+    let langOpen = false;
+
+    function toggleLang(forceClose) {
+      langOpen = forceClose ? false : !langOpen;
+      langBtn.classList.toggle('footer__lang-btn--open', langOpen);
+      langBtn.setAttribute('aria-expanded', String(langOpen));
+    }
+
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleLang(); });
+
+    document.querySelectorAll('.footer__lang-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        langCurrent.textContent = opt.dataset.lang;
+        document.querySelectorAll('.footer__lang-option').forEach(o => o.classList.remove('footer__lang-option--active'));
+        opt.classList.add('footer__lang-option--active');
+        localStorage.setItem('portal_lang', opt.dataset.lang);
+        toggleLang(true);
+      });
+    });
+
+    document.addEventListener('click', () => { if (langOpen) toggleLang(true); });
+
+    // Restore saved language
+    (function() {
+      const s = localStorage.getItem('portal_lang');
+      if (s) {
+        langCurrent.textContent = s;
+        document.querySelectorAll('.footer__lang-option').forEach(o => {
+          o.classList.toggle('footer__lang-option--active', o.dataset.lang === s);
+        });
+      }
+    })();
+
+    /* ═══════════════════════════════════════════
+       Back to Top
+    ═══════════════════════════════════════════ */
+    document.getElementById('topBtn').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ── Variables ── */
+    :root {
+      --bg: #0e0e11;
+      --bg-elevated: #17171c;
+      --card: #1c1c23;
+      --border: #2a2a35;
+      --fg: #eaeaf0;
+      --fg-muted: #8b8b9e;
+      --fg-dim: #5c5c70;
+      --accent: #d4915e;
+      --accent-light: #e8a87c;
+      --accent-glow: rgba(212, 145, 94, 0.15);
+      --accent-glow-strong: rgba(212, 145, 94, 0.3);
+      --error: #e05c5c;
+      --success: #5ec28a;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: 'Playfair Display', serif;
+      --font-ui: 'DM Sans', sans-serif;
+      --nav-height: 64px;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 200vh;
+      position: relative;
+    }
+
+    /* ═══════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════ */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+
+    /* Scrolled state — added via JS */
+    .navbar--scrolled {
+      background: rgba(14, 14, 17, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 var(--border), 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .navbar__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ── Logo ── */
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      z-index: 1001;
+    }
+
+    .navbar__logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+      box-shadow: 0 2px 12px var(--accent-glow);
+      transition: transform var(--transition);
+    }
+
+    .navbar__logo:hover .navbar__logo-icon {
+      transform: rotate(-8deg) scale(1.05);
+    }
+
+    .navbar__logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--fg);
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Nav Links ── */
+    .navbar__links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .navbar__link {
+      position: relative;
+    }
+
+    .navbar__link a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      transition: color var(--transition), background var(--transition);
+    }
+
+    .navbar__link a i {
+      font-size: 0.8rem;
+    }
+
+    .navbar__link a:hover {
+      color: var(--fg);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* Active link indicator */
+    .navbar__link--active a {
+      color: var(--accent);
+    }
+
+    .navbar__link--active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 16px; right: 16px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+
+    /* ── Dropdown ── */
+    .navbar__link--dropdown {
+      position: relative;
+    }
+
+    .navbar__link--dropdown a .fa-chevron-down {
+      font-size: 0.6rem;
+      transition: transform var(--transition);
+    }
+
+    .navbar__link--dropdown:hover a .fa-chevron-down,
+    .navbar__link--dropdown--open a .fa-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    .navbar__dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 200px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03);
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 100;
+    }
+
+    .navbar__link--dropdown:hover .navbar__dropdown,
+    .navbar__link--dropdown--open .navbar__dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Dropdown arrow */
+    .navbar__dropdown::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px; height: 12px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+    }
+
+    .navbar__dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      border-radius: 6px;
+      transition: all var(--transition);
+    }
+
+    .navbar__dropdown-item:hover {
+      color: var(--fg);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .navbar__dropdown-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--fg-dim);
+    }
+
+    .navbar__dropdown-item:hover i {
+      color: var(--accent);
+    }
+
+    .navbar__dropdown-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 8px;
+    }
+
+    .navbar__dropdown-badge {
+      margin-left: auto;
+      padding: 2px 7px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 99px;
+    }
+
+    /* ── Right Section ── */
+    .navbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1001;
+    }
+
+    .navbar__search-btn,
+    .navbar__theme-btn {
+      width: 38px; height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--fg-muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .navbar__search-btn:hover,
+    .navbar__theme-btn:hover {
+      color: var(--fg);
+      background: rgba(255,255,255,0.04);
+      border-color: var(--border);
+    }
+
+    .navbar__cta {
+      padding: 9px 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .navbar__cta:hover {
+      box-shadow: 0 4px 20px var(--accent-glow-strong);
+      transform: translateY(-1px);
+    }
+
+    .navbar__cta:active { transform: translateY(0); }
+
+    .navbar__cta::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .navbar__cta:hover::after { left: 100%; }
+
+    /* ── Hamburger ── */
+    .navbar__hamburger {
+      display: none;
+      width: 38px; height: 38px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      z-index: 1001;
+      transition: border-color var(--transition);
+    }
+
+    .navbar__hamburger:hover {
+      border-color: var(--fg-dim);
+    }
+
+    .navbar__hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--fg-muted);
+      border-radius: 1px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    /* Hamburger open state */
+    .navbar__hamburger--open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+      background: var(--fg);
+    }
+
+    .navbar__hamburger--open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .navbar__hamburger--open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+      background: var(--fg);
+    }
+
+    /* ── Search Overlay ── */
+    .navbar__search-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 15vh;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .navbar__search-overlay--open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .navbar__search-box {
+      width: 90%;
+      max-width: 560px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      overflow: hidden;
+      transform: translateY(-20px) scale(0.97);
+      transition: transform 0.3s ease;
+    }
+
+    .navbar__search-overlay--open .navbar__search-box {
+      transform: translateY(0) scale(1);
+    }
+
+    .navbar__search-input-wrap {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar__search-input-wrap i {
+      color: var(--fg-dim);
+      font-size: 1.1rem;
+    }
+
+    .navbar__search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--fg);
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .navbar__search-input::placeholder { color: var(--fg-dim); }
+
+    .navbar__search-kbd {
+      padding: 3px 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.72rem;
+      color: var(--fg-dim);
+      font-family: var(--font-ui);
+    }
+
+    .navbar__search-results {
+      padding: 8px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .navbar__search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .navbar__search-result-item:hover {
+      background: rgba(255,255,255,0.04);
+    }
+
+    .navbar__search-result-item i {
+      color: var(--fg-dim);
+      width: 20px;
+      text-align: center;
+    }
+
+    .navbar__search-result-item span {
+      font-size: 0.88rem;
+      color: var(--fg-muted);
+    }
+
+    .navbar__search-empty {
+      padding: 24px;
+      text-align: center;
+      color: var(--fg-dim);
+      font-size: 0.85rem;
+    }
+
+    .navbar__search-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar__search-footer span {
+      font-size: 0.72rem;
+      color: var(--fg-dim);
+    }
+
+    .navbar__search-footer kbd {
+      padding: 2px 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.68rem;
+      color: var(--fg-dim);
+      font-family: var(--font-ui);
+    }
+
+    /* ═══════════════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════════════ */
+    .navbar__mobile-menu {
+      position: fixed;
+      top: 0; right: 0;
+      width: 300px;
+      max-width: 85vw;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      z-index: 999;
+      padding: calc(var(--nav-height) + 24px) 20px 24px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .navbar__mobile-menu--open {
+      transform: translateX(0);
+    }
+
+    .navbar__mobile-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .navbar__mobile-backdrop--open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .navbar__mobile-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .navbar__mobile-link a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      color: var(--fg-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+
+    .navbar__mobile-link a:hover {
+      color: var(--fg);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .navbar__mobile-link--active a {
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .navbar__mobile-link a i.fa-chevron-down {
+      font-size: 0.6rem;
+      transition: transform var(--transition);
+    }
+
+    .navbar__mobile-link--expanded a i.fa-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    .navbar__mobile-sub {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      padding-left: 16px;
+    }
+
+    .navbar__mobile-link--expanded .navbar__mobile-sub {
+      max-height: 300px;
+    }
+
+    .navbar__mobile-sub li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      color: var(--fg-dim);
+    }
+
+    .navbar__mobile-sub li a:hover {
+      color: var(--fg-muted);
+    }
+
+    .navbar__mobile-sub li a i {
+      width: 18px;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    .navbar__mobile-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 0;
+    }
+
+    .navbar__mobile-cta {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition);
+      margin-top: 8px;
+    }
+
+    .navbar__mobile-cta:hover {
+      box-shadow: 0 4px 20px var(--accent-glow-strong);
+    }
+
+    /* ═══════════════════════════════════════════
+       PAGE CONTENT (demo sections)
+    ═══════════════════════════════════════════ */
+    .page-section {
+      padding: 120px 24px 80px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-section h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .page-section p {
+      color: var(--fg-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 640px;
+    }
+
+    .page-section--alt {
+      background: var(--bg-elevated);
+      max-width: 100%;
+      padding-left: calc(50% - 450px + 24px);
+      padding-right: calc(50% - 450px + 24px);
+    }
+
+    .page-divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Notification Badge ── */
+    .navbar__notif-badge {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 8px; height: 8px;
+      background: var(--error);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+    }
+
+    .navbar--scrolled .navbar__notif-badge {
+      border-color: rgba(14,14,17,0.85);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .navbar__links { display: none; }
+      .navbar__hamburger { display: flex; }
+      .navbar__cta { display: none; }
+
+      .page-section { padding: 100px 20px 60px; }
+      .page-section h2 { font-size: 1.5rem; }
+      .page-section--alt {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar__inner { padding: 0 16px; }
+      .navbar__logo-text { font-size: 1rem; }
+      .navbar__logo-icon { width: 32px; height: 32px; font-size: 13px; }
+      .navbar__mobile-menu { width: 280px; padding-top: calc(var(--nav-height) + 16px); }
+      .page-section { padding: 90px 16px 48px; }
+    }
+
+    @media (max-width: 360px) {
+      .navbar__logo-text { display: none; }
+      .page-section h2 { font-size: 1.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ NAVBAR ═══════ -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar__inner">
+
+      <!-- Logo -->
+      <a href="#" class="navbar__logo" onclick="event.preventDefault(); window.scrollTo({top:0,behavior:'smooth'})">
+        <div class="navbar__logo-icon"><i class="fa-solid fa-fingerprint"></i></div>
+        <span class="navbar__logo-text">Portal</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="navbar__links">
+        <li class="navbar__link navbar__link--active">
+          <a href="#home"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+        <li class="navbar__link">
+          <a href="#features"><i class="fa-solid fa-cube"></i> Features</a>
+        </li>
+        <li class="navbar__link navbar__link--dropdown" id="dropdownProducts">
+          <a href="#" onclick="event.preventDefault()">
+            <i class="fa-solid fa-layer-group"></i> Products
+            <i class="fa-solid fa-chevron-down"></i>
+          </a>
+          <div class="navbar__dropdown">
+            <a href="#" class="navbar__dropdown-item" onclick="event.preventDefault()">
+              <i class="fa-solid fa-bolt"></i> Lightning
+              <span class="navbar__dropdown-badge">New</span>
+            </a>
+            <a href="#" class="navbar__dropdown-item" onclick="event.preventDefault()">
+              <i class="fa-solid fa-shield-halved"></i> Shield
+            </a>
+            <a href="#" class="navbar__dropdown-item" onclick="event.preventDefault()">
+              <i class="fa-solid fa-chart-line"></i> Analytics
+            </a>
+            <div class="navbar__dropdown-divider"></div>
+            <a href="#" class="navbar__dropdown-item" onclick="event.preventDefault()">
+              <i class="fa-solid fa-grid-2"></i> All Products
+            </a>
+          </div>
+        </li>
+        <li class="navbar__link">
+          <a href="#pricing"><i class="fa-solid fa-tag"></i> Pricing</a>
+        </li>
+        <li class="navbar__link">
+          <a href="#contact"><i class="fa-solid fa-message"></i> Contact</a>
+        </li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="navbar__actions">
+        <button class="navbar__search-btn" id="searchBtn" aria-label="Open search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="navbar__theme-btn" id="themeBtn" aria-label="Toggle theme">
+          <i class="fa-regular fa-moon"></i>
+        </button>
+        <button class="navbar__cta" id="ctaBtn">Get Started</button>
+        <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════ SEARCH OVERLAY ═══════ -->
+  <div class="navbar__search-overlay" id="searchOverlay" role="dialog" aria-label="Search">
+    <div class="navbar__search-box">
+      <div class="navbar__search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="navbar__search-input" id="searchInput" type="text" placeholder="Search pages, products, docs..." autocomplete="off">
+        <span class="navbar__search-kbd">ESC</span>
+      </div>
+      <div class="navbar__search-results" id="searchResults">
+        <!-- Populated by JS -->
+      </div>
+      <div class="navbar__search-footer">
+        <span>Navigate with</span>
+        <div style="display:flex; gap:4px;">
+          <kbd><i class="fa-solid fa-arrow-up" style="font-size:0.6rem"></i></kbd>
+          <kbd><i class="fa-solid fa-arrow-down" style="font-size:0.6rem"></i></kbd>
+          <kbd>Enter</kbd>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ MOBILE BACKDROP ═══════ -->
+  <div class="navbar__mobile-backdrop" id="mobileBackdrop"></div>
+
+  <!-- ═══════ MOBILE MENU ═══════ -->
+  <aside class="navbar__mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <ul class="navbar__mobile-links">
+      <li class="navbar__mobile-link navbar__mobile-link--active">
+        <a href="#home"><span><i class="fa-solid fa-house" style="margin-right:10px;font-size:0.85rem"></i> Home</span></a>
+      </li>
+      <li class="navbar__mobile-link">
+        <a href="#features"><span><i class="fa-solid fa-cube" style="margin-right:10px;font-size:0.85rem"></i> Features</span></a>
+      </li>
+      <li class="navbar__mobile-link navbar__mobile-link--dropdown" id="mobileDropdownProducts">
+        <a href="#" onclick="event.preventDefault()">
+          <span><i class="fa-solid fa-layer-group" style="margin-right:10px;font-size:0.85rem"></i> Products</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </a>
+        <ul class="navbar__mobile-sub">
+          <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-bolt"></i> Lightning <span class="navbar__dropdown-badge" style="font-size:0.6rem">New</span></a></li>
+          <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-shield-halved"></i> Shield</a></li>
+          <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+          <li><a href="#" onclick="event.preventDefault()"><i class="fa-solid fa-grid-2"></i> All Products</a></li>
+        </ul>
+      </li>
+      <li class="navbar__mobile-link">
+        <a href="#pricing"><span><i class="fa-solid fa-tag" style="margin-right:10px;font-size:0.85rem"></i> Pricing</span></a>
+      </li>
+      <li class="navbar__mobile-link">
+        <a href="#contact"><span><i class="fa-solid fa-message" style="margin-right:10px;font-size:0.85rem"></i> Contact</span></a>
+      </li>
+    </ul>
+    <div class="navbar__mobile-divider"></div>
+    <button class="navbar__mobile-cta" id="mobileCtaBtn">Get Started</button>
+  </aside>
+
+  <!-- ═══════ PAGE CONTENT (demo scrollable sections) ═══════ -->
+  <section class="page-section" id="home">
+    <h2>Welcome to Portal</h2>
+    <p>A modern platform built for speed, security, and simplicity. Scroll down to see the navbar respond — it gains a frosted glass backdrop and shadow after you pass the top. Try the search with Ctrl+K, the dropdown, and the mobile menu.</p>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="page-section page-section--alt" id="features">
+    <h2>Powerful Features</h2>
+    <p>From real-time analytics to enterprise-grade encryption, every feature is designed to give you control without complexity. Built with performance at its core, Portal handles millions of requests while staying lightweight.</p>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="page-section" id="pricing">
+    <h2>Simple Pricing</h2>
+    <p>No hidden fees, no surprise charges. Start free, scale as you grow. Our pricing is transparent and predictable so you can focus on building your product, not managing your bill.</p>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="page-section page-section--alt" id="contact">
+    <h2>Get in Touch</h2>
+    <p>Have questions? Our team is here to help. Reach out through our support channel and we'll get back to you within 24 hours. We also offer live chat during business hours for urgent inquiries.</p>
+  </section>
+
+  <script>
+    /* ═══════════════════════════════════════════
+       Scroll Behavior — Frosted Glass
+    ═══════════════════════════════════════════ */
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+
+    function handleScroll() {
+      const scrollY = window.scrollY;
+      if (scrollY > 20) {
+        navbar.classList.add('navbar--scrolled');
+      } else {
+        navbar.classList.remove('navbar--scrolled');
+      }
+      lastScroll = scrollY;
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
+
+    /* ═══════════════════════════════════════════
+       Active Link — Highlight on scroll
+    ═══════════════════════════════════════════ */
+    const sections = document.querySelectorAll('.page-section[id]');
+    const desktopLinks = document.querySelectorAll('.navbar__link');
+    const mobileLinks = document.querySelectorAll('.navbar__mobile-link');
+
+    function updateActiveLink() {
+      const scrollY = window.scrollY + 120;
+      let currentId = 'home';
+
+      sections.forEach(section => {
+        if (scrollY >= section.offsetTop) {
+          currentId = section.id;
+        }
+      });
+
+      // Desktop
+      desktopLinks.forEach(link => {
+        link.classList.remove('navbar__link--active');
+        const href = link.querySelector('a')?.getAttribute('href');
+        if (href === `#${currentId}`) {
+          link.classList.add('navbar__link--active');
+        }
+      });
+
+      // Mobile
+      mobileLinks.forEach(link => {
+        link.classList.remove('navbar__mobile-link--active');
+        const href = link.querySelector('a')?.getAttribute('href');
+        if (href === `#${currentId}`) {
+          link.classList.add('navbar__mobile-link--active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink, { passive: true });
+    updateActiveLink();
+
+    /* ═══════════════════════════════════════════
+       Hamburger / Mobile Menu
+    ═══════════════════════════════════════════ */
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileBackdrop = document.getElementById('mobileBackdrop');
+    let menuOpen = false;
+
+    function toggleMenu() {
+      menuOpen = !menuOpen;
+      hamburgerBtn.classList.toggle('navbar__hamburger--open', menuOpen);
+      mobileMenu.classList.toggle('navbar__mobile-menu--open', menuOpen);
+      mobileBackdrop.classList.toggle('navbar__mobile-backdrop--open', menuOpen);
+      hamburgerBtn.setAttribute('aria-expanded', menuOpen);
+      document.body.style.overflow = menuOpen ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      if (menuOpen) toggleMenu();
+    }
+
+    hamburgerBtn.addEventListener('click', toggleMenu);
+    mobileBackdrop.addEventListener('click', closeMenu);
+
+    // Close menu on mobile link click
+    mobileMenu.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close menu on resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) closeMenu();
+    });
+
+    /* ═══════════════════════════════════════════
+       Mobile Dropdown Toggle
+    ═══════════════════════════════════════════ */
+    document.getElementById('mobileDropdownProducts').addEventListener('click', function () {
+      this.classList.toggle('navbar__mobile-link--expanded');
+    });
+
+    /* ═══════════════════════════════════════════
+       Desktop Dropdown — Click toggle (for
+       accessibility alongside hover)
+    ═══════════════════════════════════════════ */
+    const dropdownProducts = document.getElementById('dropdownProducts');
+
+    dropdownProducts.querySelector('a').addEventListener('click', function (e) {
+      e.preventDefault();
+      dropdownProducts.classList.toggle('navbar__link--dropdown--open');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!dropdownProducts.contains(e.target)) {
+        dropdownProducts.classList.remove('navbar__link--dropdown--open');
+      }
+    });
+
+    /* ═══════════════════════════════════════════
+       Search Overlay
+    ═══════════════════════════════════════════ */
+    const searchBtn = document.getElementById('searchBtn');
+    const searchOverlay = document.getElementById('searchOverlay');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    // Searchable items
+    const searchItems = [
+      { icon: 'fa-solid fa-house', label: 'Home', href: '#home' },
+      { icon: 'fa-solid fa-cube', label: 'Features', href: '#features' },
+      { icon: 'fa-solid fa-bolt', label: 'Lightning Product', href: '#features' },
+      { icon: 'fa-solid fa-shield-halved', label: 'Shield Product', href: '#features' },
+      { icon: 'fa-solid fa-chart-line', label: 'Analytics Product', href: '#features' },
+      { icon: 'fa-solid fa-tag', label: 'Pricing', href: '#pricing' },
+      { icon: 'fa-solid fa-message', label: 'Contact', href: '#contact' },
+      { icon: 'fa-solid fa-file-lines', label: 'Documentation', href: '#' },
+      { icon: 'fa-solid fa-circle-question', label: 'Help Center', href: '#' },
+      { icon: 'fa-solid fa-code', label: 'API Reference', href: '#' },
+    ];
+
+    function openSearch() {
+      searchOverlay.classList.add('navbar__search-overlay--open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => searchInput.focus(), 100);
+      renderSearchResults('');
+    }
+
+    function closeSearch() {
+      searchOverlay.classList.remove('navbar__search-overlay--open');
+      document.body.style.overflow = '';
+      searchInput.value = '';
+    }
+
+    searchBtn.addEventListener('click', openSearch);
+
+    searchOverlay.addEventListener('click', (e) => {
+      if (e.target === searchOverlay) closeSearch();
+    });
+
+    function renderSearchResults(query) {
+      const q = query.toLowerCase().trim();
+      const filtered = q
+        ? searchItems.filter(item => item.label.toLowerCase().includes(q))
+        : searchItems;
+
+      if (filtered.length === 0) {
+        searchResults.innerHTML = '<div class="navbar__search-empty">No results found</div>';
+        return;
+      }
+
+      searchResults.innerHTML = filtered.map(item =>
+        `<a href="${item.href}" class="navbar__search-result-item" onclick="closeSearch()">
+          <i class="${item.icon}"></i>
+          <span>${item.label}</span>
+        </a>`
+      ).join('');
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      renderSearchResults(e.target.value);
+    });
+
+    // Keyboard shortcut Ctrl+K / Cmd+K
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        if (searchOverlay.classList.contains('navbar__search-overlay--open')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      if (e.key === 'Escape') {
+        closeSearch();
+        closeMenu();
+      }
+    });
+
+    /* ═══════════════════════════════════════════
+       Theme Toggle (Dark ↔ Light demo)
+    ═══════════════════════════════════════════ */
+    const themeBtn = document.getElementById('themeBtn');
+    let isDark = true;
+
+    const lightTheme = {
+      '--bg': '#f5f3f0',
+      '--bg-elevated': '#ece9e4',
+      '--card': '#ffffff',
+      '--border': '#ddd8d0',
+      '--fg': '#1a1a1f',
+      '--fg-muted': '#6b6872',
+      '--fg-dim': '#9e9aa6',
+      '--accent': '#c07a42',
+      '--accent-light': '#d49560',
+      '--accent-glow': 'rgba(192, 122, 66, 0.12)',
+      '--accent-glow-strong': 'rgba(192, 122, 66, 0.25)',
+    };
+
+    const darkTheme = {
+      '--bg': '#0e0e11',
+      '--bg-elevated': '#17171c',
+      '--card': '#1c1c23',
+      '--border': '#2a2a35',
+      '--fg': '#eaeaf0',
+      '--fg-muted': '#8b8b9e',
+      '--fg-dim': '#5c5c70',
+      '--accent': '#d4915e',
+      '--accent-light': '#e8a87c',
+      '--accent-glow': 'rgba(212, 145, 94, 0.15)',
+      '--accent-glow-strong': 'rgba(212, 145, 94, 0.3)',
+    };
+
+    themeBtn.addEventListener('click', () => {
+      isDark = !isDark;
+      const vars = isDark ? darkTheme : lightTheme;
+      Object.entries(vars).forEach(([key, val]) => {
+        document.documentElement.style.setProperty(key, val);
+      });
+      themeBtn.querySelector('i').className = isDark
+        ? 'fa-regular fa-moon'
+        : 'fa-regular fa-sun';
+    });
+
+    /* ═══════════════════════════════════════════
+       CTA Button
+    ═══════════════════════════════════════════ */
+    document.getElementById('ctaBtn').addEventListener('click', () => {
+      document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('mobileCtaBtn').addEventListener('click', () => {
+      closeMenu();
+      setTimeout(() => {
+        document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+      }, 350);
+    });
+  </script>
+</body>
+</html>

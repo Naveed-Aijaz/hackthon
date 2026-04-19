@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison — Curated Goods</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter','system-ui','sans-serif'], serif: ['Playfair Display','Georgia','serif'] } } }
+    }
+  </script>
+  <style>
+    *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#9ca3af}
+    .page-enter{animation:pgIn .3s ease-out}
+    @keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes tIn{from{transform:translateX(120%)}to{transform:translateX(0)}}
+    @keyframes tOut{from{transform:translateX(0)}to{transform:translateX(120%)}}
+    .t-in{animation:tIn .35s cubic-bezier(.21,1.02,.73,1)}
+    .t-out{animation:tOut .25s ease-in forwards}
+    .img-z{transition:transform .6s cubic-bezier(.25,.46,.45,.94)}.group:hover .img-z{transform:scale(1.08)}
+    .link-u{position:relative}.link-u::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;background:currentColor;transition:width .3s}.link-u:hover::after{width:100%}
+    input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}
+    input[type=range]{-webkit-appearance:none;background:transparent}input[type=range]::-webkit-slider-runnable-track{height:3px;background:#e5e7eb;border-radius:2px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:16px;width:16px;border-radius:50%;background:#111827;margin-top:-7px;cursor:pointer;border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+    .drawer-ov{transition:opacity .3s}.drawer-pn{transition:transform .35s cubic-bezier(.25,.46,.45,.94)}
+    @keyframes botPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.7}}.bot-pulse{animation:botPulse 2s infinite}
+    @keyframes typing{0%{opacity:.3}50%{opacity:1}100%{opacity:.3}}.typing-dot{animation:typing 1.2s infinite}.typing-dot:nth-child(2){animation-delay:.2s}.typing-dot:nth-child(3){animation-delay:.4s}
+    @keyframes compareIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}.cmp-in{animation:compareIn .3s ease-out}
+    .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  </style>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+
+<!-- TOASTS -->
+<div id="toasts" class="fixed top-20 right-4 z-[200] flex flex-col gap-2 pointer-events-none"></div>
+
+<!-- NAV -->
+<header class="fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md border-b border-gray-100">
+  <div class="hidden md:block border-b border-gray-50">
+    <div class="max-w-[1400px] mx-auto px-6 flex justify-between items-center h-9 text-[11px] text-gray-400 tracking-wide">
+      <span>Free shipping on orders over ₹999</span>
+      <div class="flex gap-5">
+        <a href="#" onclick="event.preventDefault();navigate('track')" class="hover:text-gray-600 transition-colors">Track Order</a>
+        <a href="#" class="hover:text-gray-600 transition-colors">Help</a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-[1400px] mx-auto px-4 md:px-6 flex items-center justify-between h-16">
+    <button onclick="toggleDrawer('menu')" class="lg:hidden p-2 -ml-2 hover:bg-gray-50 rounded-lg transition-colors"><iconify-icon icon="lucide:menu" width="20"></iconify-icon></button>
+    <a href="#" onclick="navigate('home')" class="mr-8 lg:mr-12"><span class="font-serif text-2xl font-semibold tracking-tight">Maison</span></a>
+    <nav class="hidden lg:flex items-center gap-8 text-[13px] font-medium text-gray-500">
+      <a href="#" onclick="navigate('home')" class="hover:text-gray-900 transition-colors">Home</a>
+      <a href="#" onclick="navigate('shop')" class="hover:text-gray-900 transition-colors">Shop</a>
+      <a href="#" onclick="navigate('shop','new')" class="hover:text-gray-900 transition-colors">New Arrivals</a>
+      <a href="#" onclick="navigate('about')" class="hover:text-gray-900 transition-colors">About</a>
+    </nav>
+    <div class="flex items-center gap-1">
+      <button onclick="toggleDrawer('search')" class="p-2.5 hover:bg-gray-50 rounded-lg transition-colors"><iconify-icon icon="lucide:search" width="19"></iconify-icon></button>
+      <button onclick="navigate('compare')" class="p-2.5 hover:bg-gray-50 rounded-lg transition-colors relative hidden sm:block">
+        <iconify-icon icon="lucide:columns-2" width="19"></iconify-icon>
+        <span id="cmp-badge" class="hidden absolute top-1 right-1 w-4 h-4 bg-blue-600 text-white text-[10px] font-bold rounded-full items-center justify-center leading-none">0</span>
+      </button>
+      <button onclick="navigate('wishlist')" class="p-2.5 hover:bg-gray-50 rounded-lg transition-colors relative hidden sm:block">
+        <iconify-icon icon="lucide:heart" width="19"></iconify-icon>
+        <span id="wish-badge" class="hidden absolute top-1 right-1 w-4 h-4 bg-gray-900 text-white text-[10px] font-bold rounded-full items-center justify-center leading-none">0</span>
+      </button>
+      <button onclick="toggleDrawer('cart')" class="p-2.5 hover:bg-gray-50 rounded-lg transition-colors relative">
+        <iconify-icon icon="lucide:shopping-bag" width="19"></iconify-icon>
+        <span id="cart-badge" class="hidden absolute top-1 right-1 w-4 h-4 bg-gray-900 text-white text-[10px] font-bold rounded-full items-center justify-center leading-none">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU DRAWER -->
+<div id="menu-drawer" class="fixed inset-0 z-[150] hidden">
+  <div class="drawer-ov absolute inset-0 bg-black/40" onclick="toggleDrawer('menu')"></div>
+  <div class="drawer-pn absolute top-0 left-0 bottom-0 w-80 bg-white shadow-2xl -translate-x-full">
+    <div class="flex items-center justify-between p-5 border-b border-gray-100">
+      <span class="font-serif text-xl font-semibold">Maison</span>
+      <button onclick="toggleDrawer('menu')" class="p-2 hover:bg-gray-50 rounded-lg"><iconify-icon icon="lucide:x" width="20"></iconify-icon></button>
+    </div>
+    <nav class="p-5 flex flex-col gap-1">
+      <a href="#" onclick="navigate('home');toggleDrawer('menu')" class="px-4 py-3 text-[15px] font-medium rounded-lg hover:bg-gray-50">Home</a>
+      <a href="#" onclick="navigate('shop');toggleDrawer('menu')" class="px-4 py-3 text-[15px] font-medium rounded-lg hover:bg-gray-50">Shop All</a>
+      <a href="#" onclick="navigate('wishlist');toggleDrawer('menu')" class="px-4 py-3 text-[15px] font-medium rounded-lg hover:bg-gray-50">Wishlist</a>
+      <a href="#" onclick="navigate('compare');toggleDrawer('menu')" class="px-4 py-3 text-[15px] font-medium rounded-lg hover:bg-gray-50">Compare</a>
+      <a href="#" onclick="navigate('track');toggleDrawer('menu')" class="px-4 py-3 text-[15px] font-medium rounded-lg hover:bg-gray-50">Track Order</a>
+      <a href="#" onclick="navigate('about');toggleDrawer('menu')" class="px-4 py-3 text-[15px] font-medium rounded-lg hover:bg-gray-50">About</a>
+    </nav>
+  </div>
+</div>
+
+<!-- SEARCH DRAWER -->
+<div id="search-drawer" class="fixed inset-0 z-[150] hidden">
+  <div class="drawer-ov absolute inset-0 bg-black/40" onclick="toggleDrawer('search')"></div>
+  <div class="drawer-pn absolute top-0 left-0 right-0 bg-white shadow-2xl -translate-y-full">
+    <div class="max-w-2xl mx-auto p-6">
+      <div class="flex items-center gap-4">
+        <iconify-icon icon="lucide:search" width="20" class="text-gray-400 shrink-0"></iconify-icon>
+        <input id="search-input" type="text" placeholder="Search for products..." oninput="doSearch(this.value)" class="flex-1 text-lg font-light outline-none placeholder:text-gray-300 bg-transparent" />
+        <button onclick="toggleDrawer('search')" class="p-2 hover:bg-gray-50 rounded-lg"><iconify-icon icon="lucide:x" width="20"></iconify-icon></button>
+      </div>
+      <div id="search-results" class="mt-4 border-t border-gray-100 pt-4 hidden"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div id="cart-drawer" class="fixed inset-0 z-[150] hidden">
+  <div class="drawer-ov absolute inset-0 bg-black/40" onclick="toggleDrawer('cart')"></div>
+  <div class="drawer-pn absolute top-0 right-0 bottom-0 w-full max-w-md bg-white shadow-2xl translate-x-full flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-gray-100">
+      <h2 class="text-base font-semibold">Your Bag <span id="cart-drawer-count" class="text-gray-400 font-normal">(0)</span></h2>
+      <button onclick="toggleDrawer('cart')" class="p-2 hover:bg-gray-50 rounded-lg"><iconify-icon icon="lucide:x" width="20"></iconify-icon></button>
+    </div>
+    <div id="cart-drawer-items" class="flex-1 overflow-y-auto p-6"></div>
+    <div id="cart-drawer-footer" class="border-t border-gray-100 p-6"></div>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<div id="chatbot" class="fixed bottom-5 right-5 z-[120]">
+  <div id="chat-window" class="hidden mb-4 w-[360px] max-w-[calc(100vw-40px)] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden" style="height:480px;">
+    <!-- Chat header -->
+    <div class="bg-gray-900 text-white p-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center"><iconify-icon icon="lucide:bot" width="18"></iconify-icon></div>
+        <div><p class="text-sm font-medium">Maison Assistant</p><p class="text-[11px] text-gray-400">Usually replies instantly</p></div>
+      </div>
+      <button onclick="toggleChat()" class="p-1.5 hover:bg-white/10 rounded-lg transition-colors"><iconify-icon icon="lucide:x" width="18"></iconify-icon></button>
+    </div>
+    <!-- Chat messages -->
+    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3" style="height:calc(100% - 130px);"></div>
+    <!-- Quick replies -->
+    <div id="chat-quick" class="px-4 pb-2 flex flex-wrap gap-1.5"></div>
+    <!-- Chat input -->
+    <div class="p-3 border-t border-gray-100">
+      <form onsubmit="event.preventDefault();sendChat()" class="flex gap-2">
+        <input id="chat-input" type="text" placeholder="Type a message..." class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" />
+        <button type="submit" class="w-10 h-10 bg-gray-900 text-white rounded-xl flex items-center justify-center hover:bg-gray-800 transition-colors shrink-0"><iconify-icon icon="lucide:send" width="16"></iconify-icon></button>
+      </form>
+    </div>
+  </div>
+  <button onclick="toggleChat()" id="chat-fab" class="w-14 h-14 bg-gray-900 text-white rounded-2xl shadow-xl hover:bg-gray-800 transition-all hover:scale-105 flex items-center justify-center relative">
+    <iconify-icon id="chat-fab-icon" icon="lucide:message-circle" width="24"></iconify-icon>
+    <span id="chat-unread" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+  </button>
+</div>
+
+<!-- QUICK VIEW MODAL -->
+<div id="quickview" class="fixed inset-0 z-[160] hidden">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickView()"></div>
+  <div class="absolute inset-4 md:inset-12 lg:inset-x-[15%] lg:inset-y-8 bg-white rounded-xl overflow-hidden shadow-2xl">
+    <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 w-9 h-9 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm"><iconify-icon icon="lucide:x" width="18"></iconify-icon></button>
+    <div id="quickview-body" class="h-full overflow-y-auto"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="app" class="pt-[105px] md:pt-[73px]"></div>
+
+<!-- FOOTER -->
+<footer class="bg-gray-950 text-gray-400">
+  <div class="max-w-[1400px] mx-auto px-6 py-16 md:py-20">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-16">
+      <div class="col-span-2 md:col-span-1">
+        <span class="font-serif text-2xl font-semibold text-white">Maison</span>
+        <p class="text-sm leading-relaxed mt-4 text-gray-500">Thoughtfully curated goods for people who appreciate quality over quantity.</p>
+      </div>
+      <div>
+        <h4 class="text-xs font-semibold text-white uppercase tracking-widest mb-4">Shop</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="#" onclick="navigate('shop')" class="hover:text-white transition-colors">All Products</a></li>
+          <li><a href="#" onclick="navigate('shop','new')" class="hover:text-white transition-colors">New Arrivals</a></li>
+          <li><a href="#" onclick="navigate('shop','trending')" class="hover:text-white transition-colors">Trending</a></li>
+          <li><a href="#" onclick="navigate('shop','electronics')" class="hover:text-white transition-colors">Electronics</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-semibold text-white uppercase tracking-widest mb-4">Company</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="#" onclick="navigate('about')" class="hover:text-white transition-colors">About Us</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Sustainability</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-semibold text-white uppercase tracking-widest mb-4">Support</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="#" onclick="navigate('track')" class="hover:text-white transition-colors">Track Order</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Returns</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+      <p>&copy; 2025 Maison. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-gray-400 transition-colors">Privacy</a>
+        <a href="#" class="hover:text-gray-400 transition-colors">Terms</a>
+        <a href="#" class="hover:text-gray-400 transition-colors">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ==================== DATA ====================
+const P=[
+  {id:1,name:"Wireless Over-Ear Headphones",slug:"wireless-headphones",cat:"electronics",price:4999,old:7999,rating:4.8,rev:234,tag:"bestseller",desc:"Premium noise-cancelling headphones with 40-hour battery life. Plush memory foam ear cushions, adaptive ANC, and high-resolution audio certified by the Japan Audio Society.",img:"audio-headphones-black-premium"},
+  {id:2,name:"Leather Minimalist Watch",slug:"leather-watch",cat:"accessories",price:3499,old:4999,rating:4.6,rev:189,tag:"new",desc:"Handcrafted with genuine Italian leather and Japanese quartz movement. Sapphire crystal glass, 30m water resistance. Gets better with age.",img:"watch-leather-strap-minimal"},
+  {id:3,name:"Organic Cotton Crew Tee",slug:"organic-tee",cat:"fashion",price:1299,old:1899,rating:4.4,rev:567,tag:"",desc:"Heavyweight 220gsm organic cotton. Pre-shrunk, relaxed fit, reinforced collar. Made in a fair-trade certified factory.",img:"tshirt-cotton-white-minimal"},
+  {id:4,name:"Smart Home Speaker",slug:"smart-speaker",cat:"electronics",price:6999,old:9999,rating:4.7,rev:312,tag:"trending",desc:"Room-filling 360° sound with deep bass. Voice control, multi-room sync, privacy features. Works with Alexa, Google, and Siri.",img:"smart-speaker-fabric-dark"},
+  {id:5,name:"Handmade Ceramic Vase Set",slug:"ceramic-vases",cat:"home",price:1899,old:2499,rating:4.5,rev:145,tag:"",desc:"Set of three wheel-thrown ceramic vases in matte earth tones. Each piece is unique due to the handmade process.",img:"ceramic-vases-earth-tones"},
+  {id:6,name:"Waxed Canvas Tote",slug:"canvas-tote",cat:"accessories",price:2499,old:3499,rating:4.3,rev:203,tag:"new",desc:"Heavy-duty 18oz waxed canvas with bridle leather handles and solid brass hardware. Develops a beautiful patina.",img:"canvas-bag-waxed-tan"},
+  {id:7,name:"Portable Bluetooth Speaker",slug:"portable-speaker",cat:"electronics",price:2999,old:4499,rating:4.6,rev:421,tag:"bestseller",desc:"IPX7 waterproof, dust-proof, drop-proof. 12 hours playtime, USB-C fast charging, stereo pairing. Built for outdoors.",img:"bluetooth-speaker-portable-outdoor"},
+  {id:8,name:"Linen Relaxed Shirt",slug:"linen-shirt",cat:"fashion",price:2199,old:2999,rating:4.5,rev:278,tag:"trending",desc:"European flax linen blended with cotton for softness without wrinkles. Mother-of-pearl buttons, box pleat back.",img:"shirt-linen-beige-relaxed"},
+  {id:9,name:"Soy Wax Candle Trio",slug:"soy-candles",cat:"home",price:1499,old:1999,rating:4.8,rev:389,tag:"bestseller",desc:"Amber, cedar, and lavender. Hand-poured in small batches. 40-hour burn time each. Arrives in kraft gift box.",img:"candles-soy-trio-warm"},
+  {id:10,name:"Mechanical Keyboard",slug:"mech-keyboard",cat:"electronics",price:5499,old:7999,rating:4.9,rev:567,tag:"trending",desc:"Gasket-mounted, hot-swappable, PBT doubleshot keycaps. South-facing LEDs, sound-dampening foam, aluminum case.",img:"keyboard-mechanical-dark-premium"},
+  {id:11,name:"Merino Wool Scarf",slug:"wool-scarf",cat:"fashion",price:1799,old:2499,rating:4.4,rev:167,tag:"new",desc:"Extra-fine 17.5 micron merino. Incredibly soft, temperature-regulating, itch-free. 200×70cm with storage bag.",img:"scarf-merino-olive-wool"},
+  {id:12,name:"Bamboo Desk Organizer",slug:"desk-organizer",cat:"home",price:999,old:1499,rating:4.3,rev:234,tag:"",desc:"Clean lines, minimal joints. Holds pens, cards, phone, accessories. Food-safe natural oil finish.",img:"desk-organizer-bamboo-clean"},
+  {id:13,name:"Qi Wireless Charger",slug:"wireless-charger",cat:"electronics",price:1499,old:2199,rating:4.5,rev:345,tag:"",desc:"15W fast charging, all Qi devices. Slim 7mm profile, anti-slip ring, subtle LED. Rubberized base.",img:"wireless-charger-slim-dark"},
+  {id:14,name:"Full-Grain Leather Wallet",slug:"leather-wallet",cat:"accessories",price:1999,old:2999,rating:4.7,rev:412,tag:"bestseller",desc:"Vegetable-tanned from Tamil Nadu. 6 card slots, 2 hidden pockets, RFID blocking. Handstitched waxed thread.",img:"wallet-leather-bifold-dark"},
+  {id:15,name:"Raw Selvedge Denim Jacket",slug:"denim-jacket",cat:"fashion",price:3999,old:5499,rating:4.6,rev:198,tag:"trending",desc:"14oz Japanese selvedge, one-wash. Copper rivets, chain-stitched hems. Fades uniquely to your lifestyle.",img:"denim-jacket-raw-indigo"},
+  {id:16,name:"Handwoven Cotton Throw",slug:"cotton-throw",cat:"home",price:2899,old:3999,rating:4.8,rev:276,tag:"new",desc:"Handloom in Rajasthan, herringbone pattern. Organic cotton, pre-washed. 150×200cm. Gets softer every wash.",img:"throw-blanket-cotton-weave"}
+];
+
+// ==================== STATE ====================
+let cart=JSON.parse(localStorage.getItem('mn_cart')||'[]');
+let wish=JSON.parse(localStorage.getItem('mn_wish')||'[]');
+let compare=JSON.parse(localStorage.getItem('mn_cmp')||'[]');
+let recent=JSON.parse(localStorage.getItem('mn_recent')||'[]');
+let page='home',filter='',sort='default',maxP=10000,pdQty=1;
+let chatOpen=false,chatMessages=[],chatUnread=0;
+
+function save(){
+  localStorage.setItem('mn_cart',JSON.stringify(cart));
+  localStorage.setItem('mn_wish',JSON.stringify(wish));
+  localStorage.setItem('mn_cmp',JSON.stringify(compare));
+  localStorage.setItem('mn_recent',JSON.stringify(recent.slice(0,10)));
+  badges();cartDrawer();
+}
+
+// ==================== HELPERS ====================
+const $=id=>document.getElementById(id);
+const ru=n=>'₹'+n.toLocaleString('en-IN');
+const im=(s,w=600,h=600)=>`https://picsum.photos/seed/${s}/${w}/${h}.jpg`;
+const off=(o,c)=>Math.round((1-c/o)*100);
+
+function stars(r){let h='';for(let i=1;i<=5;i++){if(i<=Math.floor(r))h+='<iconify-icon icon="lucide:star" style="color:#f59e0b;font-size:12px"></iconify-icon>';else if(i-r<1)h+='<iconify-icon icon="lucide:star-half" style="color:#f59e0b;font-size:12px"></iconify-icon>';else h+='<iconify-icon icon="lucide:star" style="color:#e5e7eb;font-size:12px"></iconify-icon>'}return h}
+
+function tagH(t){const m={bestseller:{b:'bg-gray-900',t:'text-white',l:'Bestseller'},new:{b:'bg-amber-500',t:'text-white',l:'New'},trending:{b:'bg-white',t:'text-gray-900',l:'Trending'}};if(!t||!m[t])return'';const x=m[t];return`<span class="absolute top-3 left-3 ${x.b} ${x.t} text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md">${x.l}</span>`}
+
+function toast(msg,type='success'){
+  const el=document.createElement('div');
+  const ic={success:'lucide:check-circle',error:'lucide:alert-circle',info:'lucide:info'};
+  el.className=`pointer-events-auto bg-gray-900 text-white px-5 py-3.5 rounded-xl shadow-xl flex items-center gap-3 text-sm font-medium t-in`;
+  el.innerHTML=`<iconify-icon icon="${ic[type]}" width="18" class="shrink-0 opacity-70"></iconify-icon><span>${msg}</span>`;
+  $('toasts').appendChild(el);
+  setTimeout(()=>{el.classList.replace('t-in','t-out');setTimeout(()=>el.remove(),250)},2800);
+}
+
+function badges(){
+  const cc=cart.reduce((s,i)=>s+i.qty,0);
+  toggle('cart-badge',cc);toggle('wish-badge',wish.length);toggle('cmp-badge',compare.length);
+}
+function toggle(id,n){const e=$(id);if(n>0){e.textContent=n;e.classList.remove('hidden');e.classList.add('flex')}else{e.classList.add('hidden');e.classList.remove('flex')}}
+
+function trackRecent(id){recent=recent.filter(x=>x!==id);recent.unshift(id);if(recent.length>10)recent=recent.slice(0,10)}
+
+// ==================== CART ====================
+function addCart(id,q=1){const e=cart.find(x=>x.id===id);if(e)e.qty+=q;else cart.push({id,qty:q});save();toast('Added to bag')}
+function rmCart(id){cart=cart.filter(x=>x.id!==id);save();if(page==='cart')nav('cart')}
+function chgQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty=Math.max(1,i.qty+d);save();if(page==='cart')nav('cart')}
+
+function cartDrawer(){
+  const items=cart.map(c=>({...c,p:P.find(x=>x.id===c.id)})).filter(c=>c.p);
+  const ct=items.reduce((s,c)=>s+c.qty,0),sub=items.reduce((s,c)=>s+c.p.price*c.qty,0),ship=sub>=999?0:99;
+  $('cart-drawer-count').textContent=`(${ct})`;
+  if(!items.length){$('cart-drawer-items').innerHTML=`<div class="flex flex-col items-center justify-center h-full text-center py-16"><iconify-icon icon="lucide:shopping-bag" width="40" class="text-gray-200 mb-4"></iconify-icon><p class="text-sm text-gray-400 mb-4">Your bag is empty</p><button onclick="nav('shop');toggleDrawer('cart')" class="text-sm font-medium link-u">Continue Shopping</button></div>`;$('cart-drawer-footer').innerHTML='';return}
+  $('cart-drawer-items').innerHTML=items.map((c,i)=>`<div class="flex gap-4 py-4 ${i?'border-t border-gray-100':''}"><div class="w-20 h-24 rounded-lg overflow-hidden bg-gray-50 shrink-0"><img src="${im(c.p.img,200,240)}" class="w-full h-full object-cover" alt=""/></div><div class="flex-1 min-w-0"><h4 class="text-sm font-medium leading-snug line-clamp-2">${c.p.name}</h4><p class="text-sm font-semibold mt-1">${ru(c.p.price)}</p><div class="flex items-center justify-between mt-2.5"><div class="flex items-center border border-gray-200 rounded-lg overflow-hidden"><button onclick="chgQty(${c.p.id},-1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 text-sm">−</button><span class="w-8 h-8 flex items-center justify-center text-xs font-semibold border-x border-gray-200">${c.qty}</span><button onclick="chgQty(${c.p.id},1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 text-sm">+</button></div><button onclick="rmCart(${c.p.id})" class="text-gray-300 hover:text-gray-500 transition-colors"><iconify-icon icon="lucide:trash-2" width="16"></iconify-icon></button></div></div></div>`).join('');
+  $('cart-drawer-footer').innerHTML=`<div class="space-y-2 text-sm mb-5"><div class="flex justify-between text-gray-500"><span>Subtotal</span><span class="text-gray-900 font-medium">${ru(sub)}</span></div><div class="flex justify-between text-gray-500"><span>Shipping</span><span class="font-medium ${ship===0?'text-emerald-600':'text-gray-900'}">${ship===0?'Free':ru(ship)}</span></div><div class="flex justify-between pt-3 border-t border-gray-100 text-base"><span class="font-semibold">Total</span><span class="font-semibold">${ru(sub+ship)}</span></div></div><button onclick="nav('checkout');toggleDrawer('cart')" class="w-full bg-gray-900 text-white py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Checkout — ${ru(sub+ship)}</button>`;
+}
+
+// ==================== WISHLIST ====================
+function toggleWish(id){const i=wish.indexOf(id);if(i>-1){wish.splice(i,1);toast('Removed from wishlist','info')}else{wish.push(id);toast('Saved to wishlist')}save();if(['wishlist','shop','home'].includes(page))nav(page,filter)}
+
+// ==================== COMPARE ====================
+function toggleCmp(id){const i=compare.indexOf(id);if(i>-1){compare.splice(i,1);toast('Removed from compare','info')}else{if(compare.length>=4){toast('Max 4 products to compare','error');return}compare.push(id);toast('Added to compare')}save();if(['compare','shop'].includes(page))nav(page,filter)}
+
+// ==================== DRAWERS ====================
+function toggleDrawer(n){
+  const d=$(n+'-drawer'),open=!d.classList.contains('hidden'),pn=d.querySelector('.drawer-pn'),ov=d.querySelector('.drawer-ov');
+  if(open){if(n==='cart')pn.style.transform='translateX(100%)';else if(n==='menu')pn.style.transform='translateX(-100%)';else pn.style.transform='translateY(-100%)';ov.style.opacity='0';setTimeout(()=>d.classList.add('hidden'),350)}
+  else{d.classList.remove('hidden');if(n==='search'){$('search-input').value='';$('search-results').classList.add('hidden');setTimeout(()=>$('search-input').focus(),100)}requestAnimationFrame(()=>{if(n==='cart')pn.style.transform='translateX(0)';else if(n==='menu')pn.style.transform='translateX(0)';else pn.style.transform='translateY(0)';ov.style.opacity='1'})}
+}
+
+// ==================== SEARCH ====================
+function doSearch(q){
+  const el=$('search-results');q=q.trim().toLowerCase();
+  if(!q){el.classList.add('hidden');return}
+  const r=P.filter(p=>p.name.toLowerCase().includes(q)||p.cat.includes(q)||p.desc.toLowerCase().includes(q)).slice(0,6);
+  if(!r.length){el.innerHTML='<p class="text-sm text-gray-400">No results found.</p>';el.classList.remove('hidden');return}
+  el.innerHTML=r.map(p=>`<a href="#" onclick="event.preventDefault();toggleDrawer('search');nav('product',${p.id})" class="flex items-center gap-4 py-3 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors"><img src="${im(p.img,80,80)}" class="w-12 h-12 rounded-lg object-cover bg-gray-100" alt=""/><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${p.name}</p><p class="text-sm text-gray-400">${ru(p.price)}</p></div></a>`).join('');
+  el.classList.remove('hidden');
+}
+
+// ==================== QUICK VIEW ====================
+function openQV(id){
+  const p=P.find(x=>x.id===id);if(!p)return;
+  $('quickview-body').innerHTML=`<div class="grid md:grid-cols-2 h-full"><div class="relative bg-gray-50 aspect-square md:aspect-auto"><img src="${im(p.img,800,800)}" class="w-full h-full object-cover" alt="${p.name}"/>${tagH(p.tag)}</div><div class="p-8 md:p-10 flex flex-col justify-center overflow-y-auto"><p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-2">${p.cat}</p><h2 class="font-serif text-2xl md:text-3xl tracking-tight mb-3">${p.name}</h2><div class="flex items-center gap-2 mb-4"><div class="flex gap-0.5">${stars(p.rating)}</div><span class="text-xs text-gray-400">${p.rating} · ${p.rev} reviews</span></div><div class="flex items-baseline gap-2.5 mb-5"><span class="text-2xl font-semibold">${ru(p.price)}</span><span class="text-base text-gray-300 line-through">${ru(p.old)}</span><span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">${off(p.old,p.price)}% off</span></div><p class="text-sm text-gray-500 leading-relaxed mb-6">${p.desc}</p><div class="flex gap-2.5 mb-4"><button onclick="addCart(${p.id});closeQV()" class="flex-1 bg-gray-900 text-white py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Add to Bag</button><button onclick="toggleCmp(${p.id})" class="w-12 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors shrink-0" title="Compare"><iconify-icon icon="lucide:columns-2" width="17" class="${compare.includes(p.id)?'text-blue-600':''}"></iconify-icon></button><button onclick="toggleWish(${p.id})" class="w-12 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors shrink-0"><iconify-icon icon="lucide:heart" width="17" class="${wish.includes(p.id)?'text-red-500':''}"></iconify-icon></button></div></div></div>`;
+  $('quickview').classList.remove('hidden');document.body.style.overflow='hidden';
+}
+function closeQV(){$('quickview').classList.add('hidden');document.body.style.overflow=''}
+
+// ==================== PRODUCT CARD ====================
+function card(p){
+  const o=off(p.old,p.price);
+  return`<div class="group"><div class="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-50 mb-3.5 cursor-pointer" onclick="nav('product',${p.id})"><img src="${im(p.img,600,450)}" class="w-full h-full object-cover img-z" alt="${p.name}" loading="lazy"/>${tagH(p.tag)}${o>=20?`<span class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">${o}% OFF</span>`:''}<div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div><div class="absolute bottom-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300"><button onclick="event.stopPropagation();openQV(${p.id})" class="w-9 h-9 bg-white rounded-lg shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"><iconify-icon icon="lucide:eye" width="15"></iconify-icon></button><button onclick="event.stopPropagation();toggleCmp(${p.id})" class="w-9 h-9 bg-white rounded-lg shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"><iconify-icon icon="lucide:columns-2" width="15" class="${compare.includes(p.id)?'text-blue-600':''}"></iconify-icon></button><button onclick="event.stopPropagation();toggleWish(${p.id})" class="w-9 h-9 bg-white rounded-lg shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"><iconify-icon icon="lucide:heart" width="15" class="${wish.includes(p.id)?'text-red-500':''}"></iconify-icon></button></div></div><div class="flex justify-between items-start gap-3"><div class="min-w-0"><p class="text-[11px] text-gray-400 uppercase tracking-wider mb-0.5">${p.cat}</p><a href="#" onclick="event.preventDefault();nav('product',${p.id})" class="text-sm font-medium leading-snug hover:text-gray-600 transition-colors line-clamp-2">${p.name}</a><div class="flex items-center gap-1.5 mt-1">${stars(p.rating)}<span class="text-[11px] text-gray-300">(${p.rev})</span></div></div><div class="text-right shrink-0 pt-4"><p class="text-sm font-semibold">${ru(p.price)}</p><p class="text-[11px] text-gray-300 line-through">${ru(p.old)}</p></div></div></div>`
+}
+
+// ==================== ROUTER ====================
+function nav(p,param=''){page=p;filter=param;window.scrollTo({top:0,behavior:'smooth'});({home:pgHome,shop:pgShop,product:pgProduct,cart:pgCart,wishlist:pgWish,about:pgAbout,checkout:pgCheckout,success:pgSuccess,compare:pgCompare,track:pgTrack}[p]||pgHome)(param)}
+
+// ==================== PAGE: HOME ====================
+function pgHome(){
+  const trending=P.filter(p=>p.tag==='trending'||p.tag==='bestseller').slice(0,4),newest=P.filter(p=>p.tag==='new').slice(0,4),rvP=P.filter(p=>recent.includes(p.id)).slice(0,4);
+  $('app').innerHTML=`
+  <section class="relative overflow-hidden bg-gray-50" style="min-height:calc(100vh - 105px)"><div class="absolute inset-0"><img src="${im('hero-minimal-storefront-clean',1600,900)}" class="w-full h-full object-cover" style="filter:grayscale(40%) brightness(0.65)" alt=""/></div><div class="relative max-w-[1400px] mx-auto px-6 flex items-center" style="min-height:calc(100vh - 105px)"><div class="max-w-xl py-24 page-enter"><p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50 mb-5">New Season 2025</p><h1 class="font-serif text-5xl md:text-6xl lg:text-7xl text-white leading-[1.08] tracking-tight mb-6">Less, but<br><em class="font-serif italic text-white/80">better.</em></h1><p class="text-white/45 text-base md:text-lg leading-relaxed mb-10 max-w-md font-light">A curated collection of goods made with intention. Quality materials, honest pricing, no middlemen.</p><div class="flex flex-wrap gap-3"><button onclick="nav('shop')" class="bg-white text-gray-900 px-7 py-3.5 rounded-xl font-medium hover:bg-gray-100 transition-colors text-sm">Shop Collection</button><button onclick="nav('shop','trending')" class="border border-white/25 text-white px-7 py-3.5 rounded-xl font-medium hover:bg-white/10 transition-colors text-sm">Trending Now</button></div></div></div></section>
+  <section class="border-b border-gray-100"><div class="max-w-[1400px] mx-auto px-6"><div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">${[['lucide:truck','Free Shipping','Orders above ₹999'],['lucide:refresh-cw','Easy Returns','30-day hassle free'],['lucide:shield-check','Secure Checkout','256-bit encryption'],['lucide:headphones','24/7 Support','Chat & phone']].map(([i,t,s])=>`<div class="py-6 px-5 flex items-center gap-3.5"><iconify-icon icon="${i}" width="20" class="text-gray-300 shrink-0"></iconify-icon><div><p class="text-sm font-medium">${t}</p><p class="text-[11px] text-gray-400">${s}</p></div></div>`).join('')}</div></div></section>
+  <section class="max-w-[1400px] mx-auto px-6 py-20 md:py-28"><div class="flex items-end justify-between mb-10"><div><p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1.5">Browse</p><h2 class="font-serif text-3xl md:text-4xl tracking-tight">Shop by Category</h2></div><a href="#" onclick="event.preventDefault();nav('shop')" class="hidden md:flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">All Categories <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon></a></div><div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">${[['electronics','Electronics','cat-electronics-modern-clean'],['fashion','Fashion','cat-fashion-minimal-wardrobe'],['home','Home & Living','cat-home-interior-warm'],['accessories','Accessories','cat-accessories-leather-goods']].map(([c,l,s])=>`<a href="#" onclick="event.preventDefault();nav('shop','${c}')" class="group relative aspect-[3/4] rounded-2xl overflow-hidden"><img src="${im(s,500,650)}" class="w-full h-full object-cover img-z" style="filter:grayscale(20%)" alt="${l}" loading="lazy"/><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-5 md:p-6"><h3 class="text-white text-lg font-semibold">${l}</h3><span class="inline-flex items-center gap-1 text-white/50 text-xs mt-1 group-hover:text-white/80 transition-colors">Explore <iconify-icon icon="lucide:arrow-right" width="12" class="group-hover:translate-x-1 transition-transform"></iconify-icon></span></div></a>`).join('')}</div></section>
+  <section class="bg-gray-50 border-y border-gray-100"><div class="max-w-[1400px] mx-auto px-6 py-20 md:py-28"><div class="flex items-end justify-between mb-10"><div><p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1.5">Popular Right Now</p><h2 class="font-serif text-3xl md:text-4xl tracking-tight">Trending</h2></div><a href="#" onclick="event.preventDefault();nav('shop','trending')" class="hidden md:flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">View All <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon></a></div><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">${trending.map(p=>card(p)).join('')}</div></div></section>
+  <section class="max-w-[1400px] mx-auto px-6 py-20 md:py-28"><div class="grid md:grid-cols-2 gap-6"><div class="relative rounded-2xl overflow-hidden aspect-[16/9] md:aspect-auto"><img src="${im('promo-electronics-dark-clean',800,500)}" class="w-full h-full object-cover" style="filter:grayscale(50%) brightness(0.5)" alt="" loading="lazy"/><div class="absolute inset-0 flex items-center p-8 md:p-12"><div><p class="text-[11px] font-semibold uppercase tracking-widest text-amber-400 mb-2">Limited Offer</p><h3 class="font-serif text-3xl md:text-4xl text-white tracking-tight mb-2">30% Off Electronics</h3><p class="text-white/40 text-sm mb-6">Code: <span class="text-white font-medium">TECH30</span></p><button onclick="nav('shop','electronics')" class="bg-white text-gray-900 px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-100 transition-colors">Shop Now</button></div></div></div><div class="relative rounded-2xl overflow-hidden aspect-[16/9] md:aspect-auto"><img src="${im('promo-fashion-lifestyle-warm',800,500)}" class="w-full h-full object-cover" style="filter:grayscale(50%) brightness(0.5)" alt="" loading="lazy"/><div class="absolute inset-0 flex items-center p-8 md:p-12"><div><p class="text-[11px] font-semibold uppercase tracking-widest text-amber-400 mb-2">New Season</p><h3 class="font-serif text-3xl md:text-4xl text-white tracking-tight mb-2">Summer Collection</h3><p class="text-white/40 text-sm mb-6">Linen, cotton & lightweight essentials</p><button onclick="nav('shop','fashion')" class="bg-white text-gray-900 px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-100 transition-colors">Explore</button></div></div></div></div></section>
+  <section class="max-w-[1400px] mx-auto px-6 pb-20 md:pb-28"><div class="flex items-end justify-between mb-10"><div><p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1.5">Just Landed</p><h2 class="font-serif text-3xl md:text-4xl tracking-tight">New Arrivals</h2></div></div><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">${newest.map(p=>card(p)).join('')}</div></section>
+  ${rvP.length?`<section class="bg-gray-50 border-y border-gray-100"><div class="max-w-[1400px] mx-auto px-6 py-16 md:py-20"><div class="flex items-end justify-between mb-8"><div><p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1.5">Your History</p><h2 class="font-serif text-2xl md:text-3xl tracking-tight">Recently Viewed</h2></div><button onclick="recent=[];save();nav('home')" class="text-xs text-gray-400 hover:text-gray-600 transition-colors">Clear</button></div><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">${rvP.map(p=>card(p)).join('')}</div></div></section>`:''}
+  <section class="border-t border-gray-100"><div class="max-w-xl mx-auto px-6 py-20 md:py-24 text-center"><h2 class="font-serif text-2xl md:text-3xl tracking-tight mb-2">Stay in the loop</h2><p class="text-sm text-gray-400 mb-8">Early access to new drops, exclusive offers, no spam.</p><form onsubmit="event.preventDefault();toast('You\\'re in! Welcome.');this.reset()" class="flex gap-2.5"><input type="email" required placeholder="your@email.com" class="flex-1 px-5 py-3.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors"/><button type="submit" class="bg-gray-900 text-white px-6 py-3.5 rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors shrink-0">Subscribe</button></form></div></section>`;
+}
+
+// ==================== PAGE: SHOP ====================
+function pgShop(f=''){
+  let items=[...P];
+  if(f&&!['new','trending'].includes(f))items=items.filter(p=>p.cat===f);
+  else if(f==='new')items=items.filter(p=>p.tag==='new');
+  else if(f==='trending')items=items.filter(p=>p.tag==='trending'||p.tag==='bestseller');
+  items=items.filter(p=>p.price<=maxP);
+  const sf={default:()=>0,'price-asc':(a,b)=>a.price-b.price,'price-desc':(a,b)=>b.price-a.price,rating:(a,b)=>b.rating-a.rating,newest:(a,b)=>b.id-a.id};
+  if(sf[sort])items.sort(sf[sort]);
+  const label=f?(f==='new'?'New Arrivals':f==='trending'?'Trending':f.charAt(0).toUpperCase()+f.slice(1)):'All Products';
+  const cats=['','electronics','fashion','home','accessories'];
+  $('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">${label}</span></nav><div class="flex gap-10"><aside class="hidden lg:block w-56 shrink-0"><div class="sticky top-32"><h3 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Category</h3><ul class="space-y-1 mb-8">${cats.map(c=>`<li><a href="#" onclick="event.preventDefault();filter='${c}';sort='default';nav('shop','${c}')" class="block py-2 px-3 rounded-lg text-sm transition-colors ${c===f?'bg-gray-900 text-white font-medium':'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}">${c?c.charAt(0).toUpperCase()+c.slice(1):'All Products'}</a></li>`).join('')}</ul><h3 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Price Range</h3><div class="px-1 mb-2"><input type="range" min="500" max="10000" step="500" value="${maxP}" oninput="maxP=+this.value;$('pl').textContent=ru(this.value);nav('shop',filter)" class="w-full"/></div><p class="text-xs text-gray-400 mb-8 px-1">Up to <span id="pl" class="text-gray-600 font-medium">${ru(maxP)}</span></p><h3 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Filters</h3><div class="flex flex-wrap gap-2">${['bestseller','new','trending'].map(t=>`<button onclick="nav('shop','${t}')" class="text-xs px-3.5 py-1.5 border rounded-lg capitalize transition-colors ${f===t?'bg-gray-900 text-white border-gray-900':'border-gray-200 text-gray-500 hover:border-gray-300'}">${t}</button>`).join('')}</div></div></aside><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-8"><div class="flex items-center gap-4"><button onclick="$('mf').classList.toggle('hidden')" class="lg:hidden flex items-center gap-2 text-sm font-medium border border-gray-200 px-4 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"><iconify-icon icon="lucide:sliders-horizontal" width="16"></iconify-icon> Filters</button><p class="text-sm text-gray-400">${items.length} product${items.length!==1?'s':''}</p></div><select onchange="sort=this.value;nav('shop',filter)" class="text-sm border border-gray-200 rounded-xl px-4 py-2.5 bg-white focus:outline-none focus:border-gray-300 cursor-pointer">${[['default','Featured'],['price-asc','Price: Low to High'],['price-desc','Price: High to Low'],['rating','Top Rated'],['newest','Newest First']].map(([v,l])=>`<option value="${v}" ${sort===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="mf" class="hidden lg:hidden mb-6 p-5 bg-gray-50 rounded-xl space-y-4"><div><p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Category</p><div class="flex flex-wrap gap-2">${cats.map(c=>`<button onclick="filter='${c}';nav('shop','${c}')" class="text-xs px-3.5 py-1.5 border rounded-lg capitalize transition-colors ${c===f?'bg-gray-900 text-white border-gray-900':'border-gray-200 text-gray-500'}">${c||'All'}</button>`).join('')}</div></div><div><p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Max: <span class="text-gray-700">${ru(maxP)}</span></p><input type="range" min="500" max="10000" step="500" value="${maxP}" oninput="maxP=+this.value;nav('shop',filter)" class="w-full"/></div></div>${items.length?`<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">${items.map(p=>card(p)).join('')}</div>`:`<div class="text-center py-24"><iconify-icon icon="lucide:search-x" width="48" class="text-gray-200 mb-4"></iconify-icon><h3 class="text-lg font-medium mb-1">No products found</h3><p class="text-sm text-gray-400 mb-6">Try adjusting your filters.</p><button onclick="filter='';sort='default';maxP=10000;nav('shop')" class="text-sm font-medium link-u">Reset Filters</button></div>`}</div></div></div>`;
+}
+
+// ==================== PAGE: PRODUCT ====================
+function pgProduct(id){
+  const p=P.find(x=>x.id===+id);if(!p)return nav('home');
+  trackRecent(p.id);save();
+  const rel=P.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,4);
+  $('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><a href="#" onclick="event.preventDefault();nav('shop','${p.cat}')" class="hover:text-gray-600 transition-colors">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)}</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium truncate max-w-[180px]">${p.name}</span></nav><div class="grid lg:grid-cols-2 gap-10 lg:gap-16 mb-24"><div class="relative aspect-square rounded-2xl overflow-hidden bg-gray-50"><img src="${im(p.img,900,900)}" class="w-full h-full object-cover" alt="${p.name}"/>${tagH(p.tag)}</div><div class="flex flex-col justify-center"><p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-2">${p.cat}</p><h1 class="font-serif text-3xl md:text-4xl tracking-tight mb-3">${p.name}</h1><div class="flex items-center gap-2.5 mb-5"><div class="flex gap-0.5">${stars(p.rating)}</div><span class="text-sm text-gray-400">${p.rating} · ${p.rev} reviews</span></div><div class="flex items-baseline gap-3 mb-6"><span class="text-3xl font-semibold">${ru(p.price)}</span><span class="text-lg text-gray-300 line-through">${ru(p.old)}</span><span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg">${off(p.old,p.price)}% off</span></div><p class="text-sm text-gray-500 leading-relaxed mb-8">${p.desc}</p><div class="flex items-center gap-4 mb-6"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Qty</span><div class="flex items-center border border-gray-200 rounded-xl overflow-hidden"><button onclick="pdQty=Math.max(1,pdQty-1);$('pq').textContent=pdQty" class="w-11 h-11 flex items-center justify-center hover:bg-gray-50 transition-colors">−</button><span id="pq" class="w-11 h-11 flex items-center justify-center text-sm font-semibold border-x border-gray-200">1</span><button onclick="pdQty++;$('pq').textContent=pdQty" class="w-11 h-11 flex items-center justify-center hover:bg-gray-50 transition-colors">+</button></div><span class="inline-flex items-center gap-1.5 text-xs text-emerald-600"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>In Stock</span></div><div class="flex gap-3 mb-8"><button onclick="addCart(${p.id},pdQty)" class="flex-1 bg-gray-900 text-white py-4 rounded-xl font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 text-sm"><iconify-icon icon="lucide:shopping-bag" width="17"></iconify-icon> Add to Bag</button><button onclick="addCart(${p.id},pdQty);nav('checkout')" class="flex-1 border-2 border-gray-900 text-gray-900 py-4 rounded-xl font-medium hover:bg-gray-900 hover:text-white transition-colors text-sm">Buy Now</button><button onclick="toggleCmp(${p.id})" class="w-14 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors shrink-0" title="Compare"><iconify-icon icon="lucide:columns-2" width="19" class="${compare.includes(p.id)?'text-blue-600':''}"></iconify-icon></button><button onclick="toggleWish(${p.id})" class="w-14 border border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors shrink-0"><iconify-icon icon="lucide:heart" width="19" class="${wish.includes(p.id)?'text-red-500':''}"></iconify-icon></button></div><div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-100">${[['lucide:truck','Free Shipping','On orders ₹999+'],['lucide:refresh-cw','30-Day Returns','No questions asked'],['lucide:shield-check','2-Year Warranty','Full coverage']].map(([i,t,s])=>`<div class="text-center"><iconify-icon icon="${i}" width="18" class="text-gray-300 mx-auto mb-1.5"></iconify-icon><p class="text-xs font-medium">${t}</p><p class="text-[10px] text-gray-400 mt-0.5">${s}</p></div>`).join('')}</div></div></div>${rel.length?`<div class="border-t border-gray-100 pt-16"><h2 class="font-serif text-2xl md:text-3xl tracking-tight mb-10">You might also like</h2><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">${rel.map(p=>card(p)).join('')}</div></div>`:''}</div>`;
+  pdQty=1;
+}
+
+// ==================== PAGE: CART ====================
+function pgCart(){
+  const items=cart.map(c=>({...c,p:P.find(x=>x.id===c.id)})).filter(c=>c.p);
+  const sub=items.reduce((s,c)=>s+c.p.price*c.qty,0),ship=sub>=999?0:99,total=sub+ship;
+  $('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">Cart (${items.reduce((s,c)=>s+c.qty,0)})</span></nav>${!items.length?`<div class="text-center py-28"><iconify-icon icon="lucide:shopping-bag" width="48" class="text-gray-200 mb-5"></iconify-icon><h2 class="font-serif text-3xl tracking-tight mb-2">Your bag is empty</h2><p class="text-sm text-gray-400 mb-8">Discover something you love.</p><button onclick="nav('shop')" class="bg-gray-900 text-white px-7 py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Browse Products</button></div>`:`<h1 class="text-2xl font-semibold mb-8">Your Bag</h1><div class="grid lg:grid-cols-3 gap-10"><div class="lg:col-span-2 space-y-0 divide-y divide-gray-100 border-t border-b border-gray-100">${items.map(c=>`<div class="flex gap-5 py-6"><a href="#" onclick="event.preventDefault();nav('product',${c.p.id})" class="w-28 h-32 rounded-xl overflow-hidden bg-gray-50 shrink-0"><img src="${im(c.p.img,280,320)}" class="w-full h-full object-cover" alt=""/></a><div class="flex-1 min-w-0 flex flex-col justify-between"><div><p class="text-[11px] text-gray-400 uppercase tracking-wider">${c.p.cat}</p><a href="#" onclick="event.preventDefault();nav('product',${c.p.id})" class="text-sm font-medium hover:text-gray-600 transition-colors">${c.p.name}</a></div><div class="flex items-center justify-between mt-3"><div class="flex items-center border border-gray-200 rounded-lg overflow-hidden"><button onclick="chgQty(${c.p.id},-1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 text-sm">−</button><span class="w-8 h-8 flex items-center justify-center text-xs font-semibold border-x border-gray-200">${c.qty}</span><button onclick="chgQty(${c.p.id},1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 text-sm">+</button></div><div class="flex items-center gap-4"><span class="text-sm font-semibold">${ru(c.p.price*c.qty)}</span><button onclick="rmCart(${c.p.id})" class="text-gray-300 hover:text-red-400 transition-colors"><iconify-icon icon="lucide:trash-2" width="16"></iconify-icon></button></div></div></div></div>`).join('')}</div><div><div class="bg-gray-50 rounded-2xl p-6 sticky top-32"><h3 class="text-base font-semibold mb-5">Order Summary</h3><div class="space-y-3 text-sm mb-5"><div class="flex justify-between text-gray-500"><span>Subtotal</span><span class="text-gray-900 font-medium">${ru(sub)}</span></div><div class="flex justify-between text-gray-500"><span>Shipping</span><span class="font-medium ${ship===0?'text-emerald-600':'text-gray-900'}">${ship===0?'Free':ru(ship)}</span></div>${ship>0?`<p class="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">Add ${ru(999-sub)} more for free shipping</p>`:''}<div class="border-t border-gray-200 pt-3 flex justify-between text-base"><span class="font-semibold">Total</span><span class="font-semibold">${ru(total)}</span></div></div><button onclick="nav('checkout')" class="w-full bg-gray-900 text-white py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Proceed to Checkout</button><button onclick="nav('shop')" class="w-full text-center text-sm text-gray-400 hover:text-gray-600 mt-2 py-1 transition-colors">Continue Shopping</button></div></div></div>`}</div>`;
+}
+
+// ==================== PAGE: WISHLIST ====================
+function pgWish(){
+  const items=P.filter(p=>wish.includes(p.id));
+  $('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">Wishlist (${items.length})</span></nav>${!items.length?`<div class="text-center py-28"><iconify-icon icon="lucide:heart" width="48" class="text-gray-200 mb-5"></iconify-icon><h2 class="font-serif text-3xl tracking-tight mb-2">Nothing saved yet</h2><p class="text-sm text-gray-400 mb-8">Tap the heart on products you love.</p><button onclick="nav('shop')" class="bg-gray-900 text-white px-7 py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Start Exploring</button></div>`:`<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">${items.map(p=>card(p)).join('')}</div>`}</div>`;
+}
+
+// ==================== PAGE: COMPARE ====================
+function pgCompare(){
+  const items=compare.map(id=>P.find(p=>p.id===id)).filter(Boolean);
+  if(items.length<2){$('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">Compare</span></nav><div class="text-center py-28"><iconify-icon icon="lucide:columns-2" width="48" class="text-gray-200 mb-5"></iconify-icon><h2 class="font-serif text-3xl tracking-tight mb-2">Select products to compare</h2><p class="text-sm text-gray-400 mb-2">Add at least 2 products (max 4)</p><p class="text-sm text-gray-400 mb-8">${items.length} selected</p><button onclick="nav('shop')" class="bg-gray-900 text-white px-7 py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Browse Products</button></div></div>`;return}
+  const rows=[['Price',p=>`<span class="font-semibold">${ru(p.price)}</span><br><span class="text-xs text-gray-300 line-through">${ru(p.old)}</span>`],['Rating',p=>`${stars(p.rating)} <span class="text-xs text-gray-400 ml-1">${p.rating}</span>`],['Reviews',p=>`${p.rev} reviews`],['Category',p=>p.cat.charAt(0).toUpperCase()+p.cat.slice(1)],['Discount',p=>`<span class="text-emerald-600 font-semibold">${off(p.old,p.price)}% off</span>`],['Tag',p=>p.tag?p.tag.charAt(0).toUpperCase()+p.tag.slice(1):'—']];
+  $('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">Compare (${items.length})</span></nav><div class="flex items-center justify-between mb-8"><h1 class="text-2xl font-semibold">Product Comparison</h1><button onclick="compare=[];save();nav('compare')" class="text-sm text-gray-400 hover:text-gray-600 transition-colors">Clear All</button></div><div class="overflow-x-auto -mx-6 px-6"><table class="w-full min-w-[600px]"><thead><tr><th class="text-left text-xs font-semibold uppercase tracking-widest text-gray-400 pb-4 w-32"></th>${items.map(p=>`<th class="pb-4 px-4 first:px-0"><div class="aspect-square rounded-xl overflow-hidden bg-gray-50 mb-3 cursor-pointer" onclick="nav('product',${p.id})"><img src="${im(p.img,400,400)}" class="w-full h-full object-cover" alt=""/></div><p class="text-sm font-medium leading-snug mb-1">${p.name}</p><button onclick="toggleCmp(${p.id})" class="text-[11px] text-red-400 hover:text-red-500 transition-colors">Remove</button></th>`).join('')}</tr></thead><tbody class="divide-y divide-gray-100">${rows.map(([label,fn])=>`<tr><td class="py-4 text-xs font-semibold uppercase tracking-widest text-gray-400 w-32">${label}</td>${items.map(p=>`<td class="py-4 px-4 first:px-0 text-sm">${fn(p)}</td>`).join('')}</tr>`).join('')}<tr><td class="py-4 text-xs font-semibold uppercase tracking-widest text-gray-400 w-32">Action</td>${items.map(p=>`<td class="py-4 px-4 first:px-0"><button onclick="addCart(${p.id})" class="bg-gray-900 text-white px-5 py-2.5 rounded-xl text-xs font-medium hover:bg-gray-800 transition-colors">Add to Bag</button></td>`).join('')}</tr></tbody></table></div></div>`;
+}
+
+// ==================== PAGE: ABOUT ====================
+function pgAbout(){
+  $('app').innerHTML=`<div class="page-enter"><div class="relative overflow-hidden bg-gray-900" style="min-height:50vh"><img src="${im('about-hero-workshop-craft',1600,600)}" class="absolute inset-0 w-full h-full object-cover opacity-40" alt=""/><div class="relative max-w-[1400px] mx-auto px-6 flex items-center" style="min-height:50vh"><div class="py-20"><p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-400 mb-3">Our Story</p><h1 class="font-serif text-4xl md:text-6xl text-white tracking-tight max-w-lg">Built on the belief that good things take time.</h1></div></div></div><div class="max-w-[1400px] mx-auto px-6"><div class="grid md:grid-cols-2 gap-16 py-20 md:py-28 border-b border-gray-100"><div><p class="text-sm text-gray-400 leading-relaxed mb-4">Maison started in 2020 with a simple idea: make it easy for people to find well-made things without the noise of endless options.</p><p class="text-sm text-gray-400 leading-relaxed mb-4">We work directly with makers — small workshops, family-run factories, independent designers — to bring you products that are built to last and priced fairly.</p><p class="text-sm text-gray-400 leading-relaxed">No dropshipping. No middlemen marking things up 5x. Just honest goods from people who care about their craft.</p></div><div class="aspect-[4/3] rounded-2xl overflow-hidden"><img src="${im('about-studio-workshop-light',700,525)}" class="w-full h-full object-cover" style="filter:grayscale(20%)" alt="" loading="lazy"/></div></div><div class="py-20 md:py-28 border-b border-gray-100"><p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-2">What We Stand For</p><h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-12">Our Principles</h2><div class="grid md:grid-cols-3 gap-8">${[['lucide:gem','Intentional Curation','We test everything ourselves. If we wouldn\'t use it, we don\'t sell it.'],['lucide:leaf','Sourced Responsibly','Organic, recycled, or sustainably sourced whenever possible.'],['lucide:handshake','Fair to Everyone','Fair wages for makers, fair prices for you. Lean margins.']].map(([i,t,d])=>`<div class="p-8 rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors"><iconify-icon icon="${i}" width="24" class="text-gray-300 mb-5"></iconify-icon><h3 class="text-base font-semibold mb-2">${t}</h3><p class="text-sm text-gray-400 leading-relaxed">${d}</p></div>`).join('')}</div></div><div class="py-20 md:py-28"><div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">${[['50K+','Customers'],['500+','Products'],['4.8★','Avg Rating'],['3-5 days','Delivery']].map(([n,l])=>`<div><p class="font-serif text-3xl md:text-4xl tracking-tight mb-1">${n}</p><p class="text-sm text-gray-400">${l}</p></div>`).join('')}</div></div></div></div>`;
+}
+
+// ==================== PAGE: CHECKOUT ====================
+function pgCheckout(){
+  if(!cart.length)return nav('cart');
+  const items=cart.map(c=>({...c,p:P.find(x=>x.id===c.id)})).filter(c=>c.p);
+  const sub=items.reduce((s,c)=>s+c.p.price*c.qty,0),ship=sub>=999?0:99,total=sub+ship;
+  $('app').innerHTML=`<div class="max-w-[1400px] mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><a href="#" onclick="event.preventDefault();nav('cart')" class="hover:text-gray-600 transition-colors">Cart</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">Checkout</span></nav><form onsubmit="event.preventDefault();placeOrder()" class="grid lg:grid-cols-3 gap-10"><div class="lg:col-span-2 space-y-8"><div class="border border-gray-100 rounded-2xl p-6 md:p-8"><h3 class="text-base font-semibold mb-6">Contact Information</h3><div class="grid sm:grid-cols-2 gap-4"><div><label class="text-xs font-medium text-gray-500 mb-1.5 block">First Name</label><input required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="John"/></div><div><label class="text-xs font-medium text-gray-500 mb-1.5 block">Last Name</label><input required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="Doe"/></div><div class="sm:col-span-2"><label class="text-xs font-medium text-gray-500 mb-1.5 block">Email</label><input type="email" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="john@example.com"/></div><div class="sm:col-span-2"><label class="text-xs font-medium text-gray-500 mb-1.5 block">Phone</label><input type="tel" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="+91 98765 43210"/></div></div></div><div class="border border-gray-100 rounded-2xl p-6 md:p-8"><h3 class="text-base font-semibold mb-6">Shipping Address</h3><div class="grid sm:grid-cols-2 gap-4"><div class="sm:col-span-2"><label class="text-xs font-medium text-gray-500 mb-1.5 block">Address</label><input required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="123, Main Street"/></div><div><label class="text-xs font-medium text-gray-500 mb-1.5 block">City</label><input required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="Mumbai"/></div><div><label class="text-xs font-medium text-gray-500 mb-1.5 block">State</label><input required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="Maharashtra"/></div><div><label class="text-xs font-medium text-gray-500 mb-1.5 block">PIN Code</label><input required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 transition-colors" placeholder="400001"/></div><div><label class="text-xs font-medium text-gray-500 mb-1.5 block">Country</label><input value="India" readonly class="w-full px-4 py-3 border border-gray-100 rounded-xl text-sm bg-gray-50 text-gray-400"/></div></div></div><div class="border border-gray-100 rounded-2xl p-6 md:p-8"><h3 class="text-base font-semibold mb-6">Payment Method</h3><div class="space-y-3">${[['cod','lucide:banknote','Cash on Delivery','Pay when your order arrives'],['upi','lucide:smartphone','UPI','Google Pay, PhonePe, Paytm'],['card','lucide:credit-card','Credit / Debit Card','Visa, Mastercard, RuPay']].map(([v,i,t,s],idx)=>`<label class="flex items-center gap-4 p-4 border ${idx===0?'border-gray-900 bg-gray-50':'border-gray-100'} rounded-xl cursor-pointer hover:border-gray-200 transition-colors"><input type="radio" name="pay" value="${v}" ${idx===0?'checked':''} class="accent-gray-900"/><iconify-icon icon="${i}" width="20" class="text-gray-400 shrink-0"></iconify-icon><div><p class="text-sm font-medium">${t}</p><p class="text-xs text-gray-400">${s}</p></div></label>`).join('')}</div></div></div><div class="lg:col-span-1"><div class="bg-gray-50 rounded-2xl p-6 sticky top-32"><h3 class="text-base font-semibold mb-5">Order Summary</h3><div class="space-y-3 mb-5 max-h-56 overflow-y-auto pr-1">${items.map(c=>`<div class="flex gap-3"><div class="w-14 h-16 rounded-lg overflow-hidden bg-white shrink-0 relative"><img src="${im(c.p.img,120,140)}" class="w-full h-full object-cover" alt=""/><span class="absolute -top-1 -right-1 w-5 h-5 bg-gray-900 text-white text-[10px] font-bold rounded-full flex items-center justify-center">${c.qty}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-medium line-clamp-2 leading-snug">${c.p.name}</p><p class="text-xs text-gray-400 mt-0.5">${ru(c.p.price)}</p></div><p class="text-xs font-semibold shrink-0 self-center">${ru(c.p.price*c.qty)}</p></div>`).join('')}</div><div class="border-t border-gray-200 pt-4 space-y-2.5 text-sm"><div class="flex justify-between text-gray-500"><span>Subtotal</span><span class="text-gray-900 font-medium">${ru(sub)}</span></div><div class="flex justify-between text-gray-500"><span>Shipping</span><span class="font-medium ${ship===0?'text-emerald-600':'text-gray-900'}">${ship===0?'Free':ru(ship)}</span></div><div class="border-t border-gray-200 pt-3 flex justify-between"><span class="font-semibold">Total</span><span class="font-semibold">${ru(total)}</span></div></div><button type="submit" class="w-full bg-gray-900 text-white py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors mt-6 text-sm flex items-center justify-center gap-2"><iconify-icon icon="lucide:lock" width="15"></iconify-icon> Place Order</button><p class="text-[11px] text-gray-400 text-center mt-3">Encrypted & secure.</p></div></div></form></div>`;
+}
+
+function placeOrder(){const oid='MN-'+Date.now().toString(36).toUpperCase();cart=[];save();nav('success');localStorage.setItem('mn_order',oid)}
+
+// ==================== PAGE: SUCCESS ====================
+function pgSuccess(){
+  const oid=localStorage.getItem('mn_order')||'MN-XXXXXX';
+  $('app').innerHTML=`<div class="max-w-lg mx-auto px-6 py-24 md:py-32 text-center page-enter"><div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-6"><iconify-icon icon="lucide:check" width="28" class="text-emerald-600"></iconify-icon></div><h1 class="font-serif text-3xl md:text-4xl tracking-tight mb-3">Order Confirmed</h1><p class="text-sm text-gray-400 mb-1">Thank you for shopping with Maison.</p><p class="text-sm text-gray-400 mb-10">Order ID: <span class="font-medium text-gray-600">${oid}</span></p><div class="bg-gray-50 rounded-2xl p-6 text-left mb-10"><div class="space-y-4">${[['Confirmation email sent','lucide:mail'],['Order being prepared — ships within 24 hours','lucide:package'],['Tracking link via SMS & email','lucide:map-pin']].map(([t,i])=>`<div class="flex items-start gap-3"><iconify-icon icon="${i}" width="18" class="text-gray-300 mt-0.5 shrink-0"></iconify-icon><p class="text-sm text-gray-500">${t}</p></div>`).join('')}</div></div><div class="flex flex-col sm:flex-row gap-3 justify-center"><button onclick="nav('shop')" class="bg-gray-900 text-white px-7 py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Continue Shopping</button><button onclick="nav('track')" class="border border-gray-200 text-gray-600 px-7 py-3.5 rounded-xl font-medium hover:bg-gray-50 transition-colors text-sm">Track Order</button></div></div>`;
+}
+
+// ==================== PAGE: TRACK ORDER ====================
+function pgTrack(){
+  const oid=localStorage.getItem('mn_order');
+  const steps=oid?[{label:'Order Placed',time:'Just now',done:true},{label:'Confirmed',time:'Processing',done:true,active:true},{label:'Shipped',time:'—',done:false},{label:'Out for Delivery',time:'—',done:false},{label:'Delivered',time:'—',done:false}]:[];
+  $('app').innerHTML=`<div class="max-w-2xl mx-auto px-6 py-8 md:py-12 page-enter"><nav class="flex items-center gap-2 text-xs text-gray-400 mb-8"><a href="#" onclick="event.preventDefault();nav('home')" class="hover:text-gray-600 transition-colors">Home</a><iconify-icon icon="lucide:chevron-right" width="12"></iconify-icon><span class="text-gray-600 font-medium">Track Order</span></nav><h1 class="text-2xl font-semibold mb-8">Track Your Order</h1>${oid?`<div class="bg-gray-50 rounded-2xl p-6 mb-8"><p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Order ID</p><p class="text-lg font-semibold">${oid}</p></div><div class="relative pl-8">${steps.map((s,i)=>`<div class="relative pb-10 last:pb-0"><div class="absolute left-[-25px] top-0.5 w-3 h-3 rounded-full border-2 ${s.done?(s.active?'bg-blue-600 border-blue-600 border-4':'bg-gray-900 border-gray-900'):'border-gray-300 bg-white'}"></div>${i<steps.length-1?`<div class="absolute left-[-20px] top-4 w-0.5 h-full ${s.done?'bg-gray-900':'bg-gray-200'}"></div>`:''}<div><p class="text-sm font-medium ${s.active?'text-blue-600':''}">${s.label}</p><p class="text-xs text-gray-400 mt-0.5">${s.time}</p></div></div>`).join('')}</div>`:`<div class="text-center py-20"><iconify-icon icon="lucide:package-search" width="48" class="text-gray-200 mb-5"></iconify-icon><h2 class="font-serif text-2xl tracking-tight mb-2">No orders yet</h2><p class="text-sm text-gray-400 mb-8">Place an order to track it here.</p><button onclick="nav('shop')" class="bg-gray-900 text-white px-7 py-3.5 rounded-xl font-medium hover:bg-gray-800 transition-colors text-sm">Start Shopping</button></div>`}</div>`;
+}
+
+// ==================== CHATBOT ====================
+const BOT_KB={
+  shipping:{keys:['shipping','delivery','ship','deliver','days','how long','when'],reply:"We offer free shipping on orders above ₹999. Standard delivery takes 3-5 business days. Express delivery (1-2 days) is available for ₹199."},
+  returns:{keys:['return','refund','exchange','return policy','money back'],reply:"We have a hassle-free 30-day return policy. Items must be unused and in original packaging. Refunds are processed within 5-7 business days after we receive the return."},
+  payment:{keys:['payment','pay','cod','upi','card','credit','debit','gpay','phonepe'],reply:"We accept Cash on Delivery, UPI (Google Pay, PhonePe, Paytm), and all major Credit/Debit cards (Visa, Mastercard, RuPay). All payments are encrypted and secure."},
+  discount:{keys:['discount','coupon','offer','code','promo','sale','off'],reply:"Use code TECH30 for 30% off Electronics. Code WELCOME10 gives 10% off your first order. Check our homepage for seasonal sales and flash deals!"},
+  warranty:{keys:['warranty','warranty','guarantee','repair','broken','damaged','defective'],reply:"All products come with a minimum 2-year warranty against manufacturing defects. For damaged items, contact us within 48 hours for a free replacement."},
+  track:{keys:['track','tracking','where is my order','order status','check order'],reply:`<p>You can track your order from the <a href="#" onclick="event.preventDefault();toggleChat();nav('track')" class="text-blue-600 underline">Track Order page</a>. Just enter your order ID to see real-time status.</p>`},
+  contact:{keys:['contact','phone','email','call','reach','support','help','talk'],reply:"You can reach us at:<br/>• Phone: +91 98765 43210<br/>• Email: hello@maison.in<br/>• Hours: Mon-Sat, 9am-8pm IST"},
+  sizing:{keys:['size','sizing','fit','measure','xl','xxl','small','large','medium'],reply:"We provide detailed size charts on every product page. Generally, our clothing runs true to size. If you're between sizes, we recommend sizing up for a relaxed fit."},
+  default_reply:"I'm not sure about that. Could you try rephrasing? I can help with: shipping, returns, payments, discounts, warranty, order tracking, and sizing."
+};
+
+function getBotReply(msg){
+  const m=msg.toLowerCase();
+  for(const cat of Object.values(BOT_KB)){
+    if(cat.keys.some(k=>m.includes(k)))return cat.reply;
+  }
+  // Check if asking about a specific product
+  const product=P.find(p=>m.includes(p.name.toLowerCase())||p.name.toLowerCase().split(' ').some(w=>w.length>4&&m.includes(w)));
+  if(product)return`<p><strong>${product.name}</strong> — ${ru(product.price)} (${off(product.old,product.price)}% off)<br/>${product.desc.substring(0,120)}...<br/><br/><a href="#" onclick="event.preventDefault();toggleChat();nav('product',${product.id})" class="text-blue-600 underline">View Product →</a></p>`;
+  return BOT_KB.default_reply;
+}
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  const w=$('chat-window'),fab=$('chat-fab-icon');
+  if(chatOpen){
+    w.classList.remove('hidden');
+    fab.setAttribute('icon','lucide:x');
+    chatUnread=0;$('chat-unread').classList.add('hidden');
+    if(!chatMessages.length)addBotMsg("Hi! 👋 I'm the Maison assistant. How can I help you today?",['Shipping info','Return policy','Payment methods','Current offers']);
+    else scrollChat();
+    setTimeout(()=>$('chat-input').focus(),100);
+  }else{
+    w.classList.add('hidden');
+    fab.setAttribute('icon','lucide:message-circle');
+  }
+}
+
+function scrollChat(){$('chat-messages').scrollTo({top:$('chat-messages').scrollHeight,behavior:'smooth'})}
+
+function addBotMsg(text,quickReplies=[]){
+  chatMessages.push({from:'bot',text});
+  renderChat();
+  if(quickReplies.length)setQuickReplies(quickReplies);
+}
+
+function addUserMsg(text){
+  chatMessages.push({from:'user',text});
+  setQuickReplies([]);
+  renderChat();
+  // Show typing indicator
+  const typing=document.createElement('div');
+  typing.id='typing-ind';
+  typing.className='flex gap-1.5 items-center bg-gray-50 rounded-2xl rounded-tl-md px-4 py-3 w-fit';
+  typing.innerHTML='<span class="w-2 h-2 bg-gray-300 rounded-full typing-dot"></span><span class="w-2 h-2 bg-gray-300 rounded-full typing-dot"></span><span class="w-2 h-2 bg-gray-300 rounded-full typing-dot"></span>';
+  $('chat-messages').appendChild(typing);scrollChat();
+  setTimeout(()=>{typing.remove();addBotMsg(getBotReply(text))},800+Math.random()*700);
+}
+
+function setQuickReplies(arr){
+  $('chat-quick').innerHTML=arr.map(q=>`<button onclick="sendQuick('${q.replace(/'/g,"\\'")}')" class="text-xs border border-gray-200 rounded-full px-3 py-1.5 text-gray-500 hover:bg-gray-50 hover:border-gray-300 transition-colors whitespace-nowrap">${q}</button>`).join('');
+}
+
+function sendQuick(text){$('chat-input').value=text;sendChat()}
+function sendChat(){const inp=$('chat-input'),msg=inp.value.trim();if(!msg)return;inp.value='';addUserMsg(msg)}
+
+function renderChat(){
+  $('chat-messages').innerHTML=chatMessages.map(m=>{
+    if(m.from==='bot')return`<div class="flex gap-2.5 items-start"><div class="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><iconify-icon icon="lucide:bot" width="14" class="text-gray-500"></iconify-icon></div><div class="bg-gray-50 rounded-2xl rounded-tl-md px-4 py-3 text-sm text-gray-600 leading-relaxed max-w-[85%]">${m.text}</div></div>`;
+    return`<div class="flex justify-end"><div class="bg-gray-900 text-white rounded-2xl rounded-tr-md px-4 py-3 text-sm max-w-[85%]">${m.text}</div></div>`;
+  }).join('');
+  scrollChat();
+}
+
+// Show unread badge after 3 seconds
+setTimeout(()=>{if(!chatOpen){chatUnread=1;$('chat-unread').classList.remove('hidden');$('chat-unread').classList.add('flex')}},3000);
+
+// ==================== KEYBOARD ====================
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeQV();['search','cart','menu'].forEach(n=>{if(!$(n+'-drawer').classList.contains('hidden'))toggleDrawer(n)})}
+});
+
+// ==================== INIT ====================
+badges();cartDrawer();nav('home');
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpHub</title>
+
+    <link rel="stylesheet" href="../styles.css">
+
+  </head>
+
+  <body data-page="dashboard">
+    <div class="site-shell">
+      <header class="topbar">
+        <div class="container nav">
+          <a class="brand" href="dashboard.html"
+            ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+          >
+          <nav class="nav-links">
+            <a data-nav="dashboard" href="dashboard.html" class="active"
+              >Dashboard</a
+            >
+            <a href="explore.html">Explore</a>
+            <a href="create-request.html">Create Request</a>
+            <a href="messages.html">Messages</a>
+            <a href="profile.html">Profile</a>
+          </nav>
+          <div class="nav-actions">
+            <a class="pill" href="notifications.html">Notifications</a
+            ><a class="btn btn-primary" href="ai.html">Open AI Center</a>
+          </div>
+        </div>
+      </header>
+      <main class="container">
+        <section class="page-hero">
+          <div class="panel">
+            <p class="eyebrow">Dashboard</p>
+            <h1 style="font-size: clamp(2.3rem, 4vw, 4.2rem)">
+              Welcome back, <span data-dashboard-name="">Ayesha Khan</span>.
+            </h1>
+            <p>
+              Your command center for requests, AI insights, helper momentum,
+              and live community activity.
+            </p>
+          </div>
+        </section>
+        <section class="mini-grid section">
+          <div class="stat-card">
+            <p class="eyebrow">Trust score</p>
+            <div class="stat-value" data-stat-trust="">92%</div>
+            <p>Driven by solved requests and consistent support.</p>
+          </div>
+          <div class="stat-card">
+            <p class="eyebrow">Helping</p>
+            <div class="stat-value" data-stat-helping="">2</div>
+            <p>Requests where you are currently listed as a helper.</p>
+          </div>
+          <div class="stat-card">
+            <p class="eyebrow">Open requests</p>
+            <div class="stat-value" data-stat-open="">2</div>
+            <p>Community requests currently active across the feed.</p>
+          </div>
+          <div class="stat-card">
+            <p class="eyebrow">AI pulse</p>
+            <div class="stat-value" data-stat-insights="">1 trends</div>
+            <p>Trend count detected in the latest request activity.</p>
+          </div>
+        </section>
+        <section class="dashboard-grid section">
+          <div class="stack">
+            <div class="section-head">
+              <div>
+                <p class="section-kicker">Recent requests</p>
+                <h2>What the community needs right now</h2>
+              </div>
+              <a class="btn btn-secondary" href="explore.html">Go to feed</a>
+            </div>
+            <div class="stack" data-dashboard-requests="">
+              <article class="request-card fade-in">
+                <div class="card-meta">
+                  <span class="tag">Web Development</span>
+                  <span class="tag urgent">High</span>
+                  <span class="tag">Open</span>
+                </div>
+                <h3>
+                  Need help making my portfolio responsive before demo day
+                </h3>
+                <p>
+                  My HTML/CSS portfolio breaks on tablets and I need layout
+                  guidance before tomorrow evening.
+                </p>
+                <div class="tag-row">
+                  <span class="tag">HTML/CSS</span
+                  ><span class="tag">Responsive</span
+                  ><span class="tag">Portfolio</span>
+                </div>
+                <div
+                  class="list-item"
+                  style="padding-bottom: 0; border-bottom: 0"
+                >
+                  <div>
+                    <strong>Sara Noor</strong>
+                    <p>Karachi • 1 helper interested</p>
+                  </div>
+                  <a
+                    class="btn btn-secondary"
+                    href="details.html"
+                    >Open details</a
+                  >
+                </div>
+              </article>
+
+              <article class="request-card fade-in">
+                <div class="card-meta">
+                  <span class="tag">Design</span>
+                  <span class="tag">Medium</span>
+                  <span class="tag">Open</span>
+                </div>
+                <h3>Looking for Figma feedback on a volunteer event poster</h3>
+                <p>
+                  I have a draft poster for a campus community event and want
+                  sharper hierarchy, spacing, and CTA copy.
+                </p>
+                <div class="tag-row">
+                  <span class="tag">Figma</span><span class="tag">Poster</span
+                  ><span class="tag">Design Review</span>
+                </div>
+                <div
+                  class="list-item"
+                  style="padding-bottom: 0; border-bottom: 0"
+                >
+                  <div>
+                    <strong>Ayesha Khan</strong>
+                    <p>Lahore • 1 helper interested</p>
+                  </div>
+                  <a
+                    class="btn btn-secondary"
+                    href="details.html"
+                    >Open details</a
+                  >
+                </div>
+              </article>
+
+              <article class="request-card fade-in">
+                <div class="card-meta">
+                  <span class="tag">Career</span>
+                  <span class="tag">Low</span>
+                  <span class="tag success">Solved</span>
+                </div>
+                <h3>Need mock interview support for internship applications</h3>
+                <p>
+                  Applying to frontend internships and need someone to practice
+                  behavioral and technical interview questions with me.
+                </p>
+                <div class="tag-row">
+                  <span class="tag">Interview Prep</span
+                  ><span class="tag">Career</span
+                  ><span class="tag">Frontend</span>
+                </div>
+                <div
+                  class="list-item"
+                  style="padding-bottom: 0; border-bottom: 0"
+                >
+                  <div>
+                    <strong>Sara Noor</strong>
+                    <p>Remote • 2 helpers interested</p>
+                  </div>
+                  <a
+                    class="btn btn-secondary"
+                    href="details.html"
+                    >Open details</a
+                  >
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="panel">
+              <p class="section-kicker">AI insights</p>
+              <h3>Suggested actions for you</h3>
+              <div data-dashboard-ai="">
+                <div class="metric">
+                  <span>Most requested category</span
+                  ><strong>Web Development</strong>
+                </div>
+                <div class="metric">
+                  <span>Your strongest trust driver</span
+                  ><strong>Design Ally</strong>
+                </div>
+                <div class="metric">
+                  <span>AI says you can mentor in</span
+                  ><strong>HTML/CSS, UI/UX, Career Guidance, Figma</strong>
+                </div>
+                <div class="metric">
+                  <span>Your active requests</span><strong>1</strong>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <p class="section-kicker">Notifications</p>
+              <h3>Latest updates</h3>
+              <div class="notif-list" data-dashboard-notes="">
+                <div class="notif-item">
+                  <div>
+                    <strong
+                      >New helper matched to your responsive portfolio
+                      request</strong
+                    >
+                    <p>Match • 12 min ago</p>
+                  </div>
+                  <span class="tag urgent">Unread</span>
+                </div>
+
+                <div class="notif-item">
+                  <div>
+                    <strong
+                      >Your trust score increased after a solved request</strong
+                    >
+                    <p>Reputation • 1 hr ago</p>
+                  </div>
+                  <span class="tag urgent">Unread</span>
+                </div>
+
+                <div class="notif-item">
+                  <div>
+                    <strong
+                      >AI Center detected rising demand for interview
+                      prep</strong
+                    >
+                    <p>Insight • Today</p>
+                  </div>
+                  <span class="tag">Read</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- <script src="app.js"></script> -->
+  </body>
+</html>

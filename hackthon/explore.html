@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+
+  <body data-page="explore">
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="/"
+          ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+        >
+        <nav class="nav-links">
+          <a href="dashboard.html">Dashboard</a
+          ><a data-nav="explore" href="explore.html" class="active">Explore</a
+          ><a href="leaderboard.html">Leaderboard</a
+          ><a href="notification.html">Notifications</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <section class="page-hero">
+        <div class="panel">
+          <p class="eyebrow">Explore / Feed</p>
+          <h1 style="font-size: clamp(2.2rem, 4vw, 4rem)">
+            Browse help requests with filterable community context.
+          </h1>
+          <p>
+            Filter by category, urgency, skills, and location to surface the
+            best matches.
+          </p>
+        </div>
+      </section>
+      <section class="feed-grid section">
+        <form class="panel stack" data-filter-form="">
+          <div>
+            <p class="section-kicker">Filters</p>
+            <h2>Refine the feed</h2>
+          </div>
+          <div class="field">
+            <label>Category</label
+            ><select name="category">
+              <option value="">All categories</option>
+              <option>Web Development</option>
+              <option>Design</option>
+              <option>Career</option>
+              <option>Academics</option>
+              <option>Content</option>
+              <option>Community</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Urgency</label
+            ><select name="urgency">
+              <option value="">All urgency levels</option>
+              <option>Critical</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Skills</label
+            ><input
+              name="skill"
+              type="text"
+              placeholder="React, Figma, Git/GitHub"
+            />
+          </div>
+          <div class="field">
+            <label>Location</label
+            ><input
+              name="location"
+              type="text"
+              placeholder="Karachi, Lahore, Remote"
+            />
+          </div>
+        </form>
+        <div class="stack" data-feed-results="">
+          <article class="request-card fade-in">
+            <div class="card-meta">
+              <span class="tag">Web Development</span>
+              <span class="tag urgent">High</span>
+              <span class="tag">Open</span>
+            </div>
+            <h3>Need help making my portfolio responsive before demo day</h3>
+            <p>
+              My HTML/CSS portfolio breaks on tablets and I need layout guidance
+              before tomorrow evening.
+            </p>
+            <div class="tag-row">
+              <span class="tag">HTML/CSS</span
+              ><span class="tag">Responsive</span
+              ><span class="tag">Portfolio</span>
+            </div>
+            <div class="list-item" style="padding-bottom: 0; border-bottom: 0">
+              <div>
+                <strong>Sara Noor</strong>
+                <p>Karachi • 1 helper interested</p>
+              </div>
+              <a class="btn btn-secondary" href="request-detail.html?id=req-1"
+                >Open details</a
+              >
+            </div>
+          </article>
+
+          <article class="request-card fade-in">
+            <div class="card-meta">
+              <span class="tag">Design</span>
+              <span class="tag">Medium</span>
+              <span class="tag">Open</span>
+            </div>
+            <h3>Looking for Figma feedback on a volunteer event poster</h3>
+            <p>
+              I have a draft poster for a campus community event and want
+              sharper hierarchy, spacing, and CTA copy.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Figma</span><span class="tag">Poster</span
+              ><span class="tag">Design Review</span>
+            </div>
+            <div class="list-item" style="padding-bottom: 0; border-bottom: 0">
+              <div>
+                <strong>Ayesha Khan</strong>
+                <p>Lahore • 1 helper interested</p>
+              </div>
+              <a class="btn btn-secondary" href="request-detail.html?id=req-2"
+                >Open details</a
+              >
+            </div>
+          </article>
+
+          <article class="request-card fade-in">
+            <div class="card-meta">
+              <span class="tag">Career</span>
+              <span class="tag">Low</span>
+              <span class="tag success">Solved</span>
+            </div>
+            <h3>Need mock interview support for internship applications</h3>
+            <p>
+              Applying to frontend internships and need someone to practice
+              behavioral and technical interview questions with me.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Interview Prep</span
+              ><span class="tag">Career</span><span class="tag">Frontend</span>
+            </div>
+            <div class="list-item" style="padding-bottom: 0; border-bottom: 0">
+              <div>
+                <strong>Sara Noor</strong>
+                <p>Remote • 2 helpers interested</p>
+              </div>
+              <a class="btn btn-secondary" href="request-detail.html?id=req-3"
+                >Open details</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

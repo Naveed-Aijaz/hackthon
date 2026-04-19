@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpHub</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body data-page="onboarding">
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="onboarding.html"
+          ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+        >
+        <nav class="nav-links">
+          <a href="dashboard.html">Dashboard</a><a href="explore.html">Explore</a
+          ><a href="profile.html">Profile</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <section class="page-hero">
+        <div class="panel">
+          <p class="eyebrow">Onboarding</p>
+          <h1 style="font-size: clamp(2.2rem, 4vw, 4rem)">
+            Shape your support identity with AI suggestions.
+          </h1>
+          <p>
+            Name your strengths, interests, and location so the system can
+            recommend where you can help and where you may need backup.
+          </p>
+        </div>
+      </section>
+      <section class="two-col section">
+        <form class="form-card stack" data-onboarding-form="">
+          <div class="field">
+            <label>Switch demo user</label
+            ><select data-user-switch="">
+              <option value="user-1">Ayesha Khan</option>
+              <option value="user-2">Hassan Ali</option>
+              <option value="user-3">Sara Noor</option>
+            </select>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label>Name</label><input name="name" type="text" />
+            </div>
+            <div class="field">
+              <label>Location</label><input name="location" type="text" />
+            </div>
+            <div class="field-full">
+              <label>Skills</label
+              ><input
+                name="skills"
+                type="text"
+                placeholder="JavaScript, UI/UX, Public Speaking"
+              />
+            </div>
+            <div class="field-full">
+              <label>Interests</label
+              ><input
+                name="interests"
+                type="text"
+                placeholder="Hackathons, mentoring, startups"
+              />
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Save onboarding</button>
+        </form>
+        <aside class="panel stack">
+          <div>
+            <p class="section-kicker">AI suggestions</p>
+            <h2>Your likely contribution map</h2>
+          </div>
+          <div data-onboarding-ai="">
+            <div class="metric">
+              <span>You can likely help with</span
+              ><strong>HTML/CSS, UI/UX, Career Guidance, Figma</strong>
+            </div>
+            <div class="metric">
+              <span>You may want support in</span
+              ><strong>JavaScript, React, Node.js, Python</strong>
+            </div>
+            <div class="metric">
+              <span>Suggested role fit</span><strong>Both</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

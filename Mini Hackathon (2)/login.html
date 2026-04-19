@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpHub</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body data-page="auth">
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="login.html"
+          ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+        >
+        <nav class="nav-links">
+          <a href="#">Home</a><a href="#">Explore</a
+          ><a href="#">Leaderboard</a>
+        </nav>
+      </div>
+    </header>
+    <main class="auth-layout container">
+      <div class="auth-wrap">
+        <section class="auth-side fade-in">
+          <p class="eyebrow">Community access</p>
+          <h1 style="font-size: clamp(2.4rem, 4vw, 4rem)">
+            Enter the support network.
+          </h1>
+          <p>
+            Choose a demo identity, set your role, and jump into a multi-page
+            product flow designed for asking, offering, and tracking help with a
+            premium interface.
+          </p>
+          <ul>
+            <li>Role-based entry for Need Help, Can Help, or Both</li>
+            <li>
+              Direct path into dashboard, requests, AI Center, and community
+              feed
+            </li>
+            <li>Persistent demo session powered by LocalStorage</li>
+          </ul>
+        </section>
+        <section class="auth-card fade-in">
+          <p class="section-kicker">Login / Signup</p>
+          <h2>Authenticate your community profile</h2>
+          <form data-auth-form="" class="stack">
+            <div class="field">
+              <label for="auth-user">Select demo user</label
+              ><select id="auth-user" data-auth-user="">
+                <option value="user-1">Ayesha Khan</option>
+                <option value="user-2">Hassan Ali</option>
+                <option value="user-3">Sara Noor</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="auth-role">Role selection</label
+              ><select id="auth-role" data-auth-role="">
+                <option>Need Help</option>
+                <option>Can Help</option>
+                <option>Both</option>
+              </select>
+            </div>
+            <div class="auth-grid">
+              <div class="field">
+                <label>Email</label
+                ><input type="email" value="community@helphub.ai" />
+              </div>
+              <div class="field">
+                <label>Password</label
+                ><input type="password" value="demo1234" />
+              </div>
+            </div>
+            <a href="home.html" class="btn btn-primary" type="submit">
+              Continue to dashboard
+            </a>
+          </form>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

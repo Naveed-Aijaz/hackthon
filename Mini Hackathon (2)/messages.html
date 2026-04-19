@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpHub</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body data-page="messages">
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="messages.html"
+          ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+        >
+        <nav class="nav-links">
+          <a href="dashboard.html">Dashboard</a><a href="explore.html">Explore</a
+          ><a data-nav="messages" href="messages.html" class="active">Messages</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <section class="page-hero">
+        <div class="panel">
+          <p class="eyebrow">Interaction / Messaging</p>
+          <h1 style="font-size: clamp(2.2rem, 4vw, 4rem)">
+            Keep support moving through direct communication.
+          </h1>
+          <p>
+            Basic messaging gives helpers and requesters a clear follow-up path
+            once a match happens.
+          </p>
+        </div>
+      </section>
+      <section class="detail-grid section">
+        <div class="panel">
+          <p class="section-kicker">Conversation stream</p>
+          <h2>Recent messages</h2>
+          <div class="message-list" data-message-list="">
+            <div class="message-item">
+              <div>
+                <strong>Ayesha Khan → Sara Noor</strong>
+                <p>
+                  I checked your portfolio request. Share the breakpoint
+                  screenshots and I can suggest fixes.
+                </p>
+              </div>
+              <span class="tag">09:45 AM</span>
+            </div>
+            <div class="message-item">
+              <div>
+                <strong>Hassan Ali → Ayesha Khan</strong>
+                <p>
+                  Your event poster concept is solid. I would tighten the CTA
+                  and reduce the background texture.
+                </p>
+              </div>
+              <span class="tag">11:10 AM</span>
+            </div>
+          </div>
+        </div>
+        <form class="form-card stack" data-message-form="">
+          <p class="section-kicker">Send message</p>
+          <h2>Start a conversation</h2>
+          <div class="field">
+            <label>To</label
+            ><select name="to">
+              <option>Ayesha Khan</option>
+              <option>Hassan Ali</option>
+              <option>Sara Noor</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Message</label
+            ><textarea
+              name="text"
+              placeholder="Share support details, ask for files, or suggest next steps."
+            ></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

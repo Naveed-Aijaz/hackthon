@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">  
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body data-page="detail">
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="../index.html"
+          ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+        >
+        <nav class="nav-links">
+          <a href="./dashboard.html">Dashboard</a><a href="./explore.html">Explore</a
+          ><a href="./message.html">Messages</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <section class="page-hero">
+        <div class="panel">
+          <p class="eyebrow">Request detail</p>
+          <div data-request-meta="" class="tag-row">
+            <span class="tag">Web Development</span>
+            <span class="tag urgent">High</span>
+            <span class="tag">Open</span>
+          </div>
+          <h1
+            data-request-title=""
+            style="font-size: clamp(2.1rem, 4vw, 3.8rem)"
+          >
+            Need help making my portfolio responsive before demo day
+          </h1>
+          <p data-request-description="">
+            My HTML/CSS portfolio breaks on tablets and I need layout guidance
+            before tomorrow evening.
+          </p>
+        </div>
+      </section>
+      <section class="detail-grid section">
+        <div class="stack">
+          <div class="panel">
+            <p class="section-kicker">AI summary</p>
+            <h3>What this request needs</h3>
+            <p data-request-summary="">
+              Responsive layout issue with a short deadline. Best helpers are
+              frontend mentors comfortable with CSS grids and media queries.
+            </p>
+            <div class="tag-row" data-request-tags="">
+              <span class="tag">HTML/CSS</span
+              ><span class="tag">Responsive</span
+              ><span class="tag">Portfolio</span>
+            </div>
+          </div>
+          <div class="panel">
+            <p class="section-kicker">Actions</p>
+            <div class="row">
+              <button class="btn btn-primary" data-cta-help="">
+                I can help</button
+              ><button class="btn btn-secondary" data-cta-solved="">
+                Mark as solved
+              </button>
+            </div>
+          </div>
+        </div>
+        <aside class="stack">
+          <div class="panel">
+            <p class="section-kicker">Requester</p>
+            <div data-request-requester="">
+              <div class="user-line">
+                <div class="avatar teal">SN</div>
+                <div>
+                  <strong>Sara Noor</strong>
+                  <p>Karachi • Trust 74%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <p class="section-kicker">Helpers</p>
+            <h3>People ready to support</h3>
+            <div class="helper-list" data-helper-list="">
+              <div class="helper-item">
+                <div class="user-line">
+                  <div class="avatar">AK</div>
+                  <div>
+                    <strong>Ayesha Khan</strong>
+                    <p>Figma, UI/UX, HTML/CSS</p>
+                  </div>
+                </div>
+                <span class="tag">Trust 92%</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

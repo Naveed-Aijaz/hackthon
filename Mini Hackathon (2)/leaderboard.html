@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelpHub</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body data-page="leaderboard">
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="leaderboard.html"
+          ><span class="brand-badge">H</span><span>HelpHub AI</span></a
+        >
+        <nav class="nav-links">
+          <a href="dashboard.html">Dashboard</a><a href="explore.html">Explore</a
+          ><a data-nav="leaderboard" href="leaderboard.html" class="active"
+            >Leaderboard</a
+          >
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <section class="page-hero">
+        <div class="panel">
+          <p class="eyebrow">Leaderboard</p>
+          <h1 style="font-size: clamp(2.2rem, 4vw, 4rem)">
+            Recognize the people who keep the community moving.
+          </h1>
+          <p>
+            Trust score, contribution count, and badges create visible momentum
+            for reliable helpers.
+          </p>
+        </div>
+      </section>
+      <section class="leader-grid section">
+        <div class="panel">
+          <p class="section-kicker">Top helpers</p>
+          <h2>Rankings</h2>
+          <div class="rank-list" data-rank-list="">
+            <div class="rank-item">
+              <div class="user-line">
+                <div class="avatar teal">AK</div>
+                <div>
+                  <strong>#1 Ayesha Khan</strong>
+                  <p>Figma, UI/UX, HTML/CSS</p>
+                </div>
+              </div>
+              <div class="center">
+                <strong>92%</strong>
+                <p>31 contributions</p>
+              </div>
+            </div>
+
+            <div class="rank-item">
+              <div class="user-line">
+                <div class="avatar dark">HA</div>
+                <div>
+                  <strong>#2 Hassan Ali</strong>
+                  <p>JavaScript, React, Git/GitHub</p>
+                </div>
+              </div>
+              <div class="center">
+                <strong>88%</strong>
+                <p>24 contributions</p>
+              </div>
+            </div>
+
+            <div class="rank-item">
+              <div class="user-line">
+                <div class="avatar">SN</div>
+                <div>
+                  <strong>#3 Sara Noor</strong>
+                  <p>Python, Data Analysis</p>
+                </div>
+              </div>
+              <div class="center">
+                <strong>74%</strong>
+                <p>11 contributions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="section-kicker">Badge system</p>
+          <h2>Trust and achievement</h2>
+          <div class="stack" data-badge-showcase="">
+            <div class="badge-card">
+              <h3>Ayesha Khan</h3>
+              <p>Design Ally • Fast Responder • Top Mentor</p>
+              <div class="progress"><span style="width: 92%"></span></div>
+            </div>
+
+            <div class="badge-card">
+              <h3>Hassan Ali</h3>
+              <p>Code Rescuer • Bug Hunter</p>
+              <div class="progress"><span style="width: 88%"></span></div>
+            </div>
+
+            <div class="badge-card">
+              <h3>Sara Noor</h3>
+              <p>Community Voice</p>
+              <div class="progress"><span style="width: 74%"></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
